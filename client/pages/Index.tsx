@@ -28,6 +28,7 @@ export default function Index() {
   const [nowPlayingMovies, setNowPlayingMovies] = useState<TMDBMovie[]>([]);
   const [popularTVShows, setPopularTVShows] = useState<TMDBTVShow[]>([]);
   const [trendingContent, setTrendingContent] = useState<(TMDBMovie | TMDBTVShow)[]>([]);
+  const [bollywoodMovies, setBollywoodMovies] = useState<TMDBMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,13 +41,14 @@ export default function Index() {
         const languageParams = getDiscoverParams();
 
         // Fetch all movie categories
-        const [popularRes, topRatedRes, upcomingRes, nowPlayingRes, tvRes, trendingRes] = await Promise.all([
+        const [popularRes, topRatedRes, upcomingRes, nowPlayingRes, tvRes, trendingRes, bollywoodRes] = await Promise.all([
           tmdbService.getPopularMovies(1, languageParams),
           tmdbService.getTopRatedMovies(1, languageParams),
           tmdbService.getUpcomingMovies(1, languageParams),
           tmdbService.getNowPlayingMovies(1, languageParams),
           tmdbService.getPopularTVShows(1, languageParams),
           tmdbService.getTrendingAll(),
+          tmdbService.getPopularMovies(1, { with_original_language: 'hi', region: 'IN' }),
         ]);
 
         setPopularMovies(popularRes.results);
@@ -55,6 +57,7 @@ export default function Index() {
         setNowPlayingMovies(nowPlayingRes.results);
         setPopularTVShows(tvRes.results);
         setTrendingContent(trendingRes.results);
+        setBollywoodMovies(bollywoodRes.results);
         
         // Set featured movie (first popular movie)
         if (popularRes.results.length > 0) {
@@ -308,7 +311,7 @@ export default function Index() {
               {activeTab === 'movies' && activeCategory === 'Popular' && (
                 <Link to="/movies" className="ml-auto">
                   <Button variant="outline" size="sm" className="neu-button border-border/50">
-                    Show More
+                    More
                     <ChevronRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
@@ -357,6 +360,14 @@ export default function Index() {
               viewAllLink="/movies"
               viewAllText="View All Movies"
             />
+            {bollywoodMovies.length > 0 && (
+              <MovieSlider
+                title="Bollywood Hindi Movies"
+                movies={bollywoodMovies.slice(0, 20)}
+                viewAllLink="/genre/7?type=movie"
+                viewAllText="View All Hindi Movies"
+              />
+            )}
           </>
         )}
       </div>
