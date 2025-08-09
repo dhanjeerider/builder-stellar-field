@@ -126,17 +126,29 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
                 {movie.overview}
               </p>
               
-              <div className="flex space-x-2 pt-2">
+              <div className="grid grid-cols-3 gap-1 pt-2">
                 <button
                   onClick={handlePlayClick}
-                  className="flex-1 bg-primary text-primary-foreground text-xs font-medium py-2 px-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center space-x-1"
+                  className="bg-primary text-primary-foreground text-xs font-medium py-2 px-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center space-x-1"
                 >
                   <Play className="w-3 h-3 fill-current" />
                   <span>Play</span>
                 </button>
+                <button
+                  onClick={handleWatchlistClick}
+                  className={cn(
+                    "text-xs font-medium py-2 px-2 rounded-lg transition-colors flex items-center justify-center space-x-1",
+                    inWatchlist
+                      ? "bg-green-500 text-white"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  )}
+                >
+                  {inWatchlist ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+                  <span className="hidden">List</span>
+                </button>
                 <Link
                   to={linkTo}
-                  className="flex-1 bg-muted text-muted-foreground text-xs font-medium py-2 px-3 rounded-lg hover:bg-muted/80 transition-colors flex items-center justify-center space-x-1"
+                  className="bg-muted text-muted-foreground text-xs font-medium py-2 px-2 rounded-lg hover:bg-muted/80 transition-colors flex items-center justify-center space-x-1"
                 >
                   <Info className="w-3 h-3" />
                   <span>Info</span>
