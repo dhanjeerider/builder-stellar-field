@@ -99,7 +99,7 @@ export default function Index() {
     }
   };
 
-  const loadMoreContent = async () => {
+  const loadMoreContent = useCallback(async () => {
     if (loadingMore || currentPage >= totalPages) return;
 
     try {
@@ -140,7 +140,14 @@ export default function Index() {
     } finally {
       setLoadingMore(false);
     }
-  };
+  }, [loadingMore, currentPage, totalPages, activeTab, activeCategory]);
+
+  // Infinite scroll
+  const { isFetching } = useInfiniteScroll({
+    hasNextPage: currentPage < totalPages,
+    fetchNextPage: loadMoreContent,
+    threshold: 200
+  });
 
   if (loading) {
     return (
