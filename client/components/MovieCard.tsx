@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Star, Play, Info, Calendar } from 'lucide-react';
 import { TMDBMovie, TMDBTVShow, getImageUrl } from '@shared/tmdb';
+import { VideoPlayerModal } from './VideoPlayerModal';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
