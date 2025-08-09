@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { TMDBMovie, TMDBTVShow } from '@shared/tmdb';
 import { MovieCard } from './MovieCard';
 import { Button } from './ui/button';
