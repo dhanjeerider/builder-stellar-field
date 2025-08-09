@@ -143,25 +143,31 @@ export function Header() {
 
       {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
-          <div className="fixed top-16 left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border/50 p-4">
-            <nav className="space-y-2">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={cn(
-                    "block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
-                    item.active 
-                      ? "bg-primary text-primary-foreground neu-card" 
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50 neu-button"
-                  )}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <div className="fixed top-0 left-0 right-0 bg-background/98 backdrop-blur-md border-b border-border/50 pt-20 pb-6 px-4 neu-card">
+            <nav className="space-y-3 max-w-sm mx-auto">
+              {navigationItems.map((item) => {
+                const isActive = window.location.pathname === item.href;
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={cn(
+                      "block px-6 py-4 rounded-xl text-base font-medium transition-all duration-200 text-center",
+                      isActive
+                        ? "bg-primary text-primary-foreground shadow-lg"
+                        : "text-foreground hover:text-primary hover:bg-muted/50 neu-button"
+                    )}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
             </nav>
           </div>
         </div>
