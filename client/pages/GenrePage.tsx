@@ -18,23 +18,26 @@ export default function GenrePage() {
   const [genre, setGenre] = useState<TMDBGenre | null>(null);
   const [content, setContent] = useState<(TMDBMovie | TMDBTVShow)[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  // Initial fetch
   useEffect(() => {
     const fetchGenreContent = async () => {
       if (!slug) return;
-      
+
       try {
         setLoading(true);
+        setCurrentPage(1);
         const genreId = parseInt(slug);
-        
+
         // Fetch genre info and content
         const [genresRes, contentRes] = await Promise.all([
           type === 'tv' ? tmdbService.getTVGenres() : tmdbService.getMovieGenres(),
-          type === 'tv' 
-            ? tmdbService.getTVShowsByGenre(genreId, currentPage)
-            : tmdbService.getMoviesByGenre(genreId, currentPage)
+          type === 'tv'
+            ? tmdbService.getTVShowsByGenre(genreId, 1)
+            : tmdbService.getMoviesByGenre(genreId, 1)
         ]);
 
         const foundGenre = genresRes.genres.find(g => g.id === genreId);
@@ -49,7 +52,36 @@ export default function GenrePage() {
     };
 
     fetchGenreContent();
-  }, [slug, type, currentPage, activeSort]);
+  }, [slug, type, activeSort]);
+
+  // Fetch next page
+  const fetchNextPage = useCallback(async () => {
+    if (!slug || currentPage >= totalPages || loadingMore) return;
+
+    try {
+      setLoadingMore(true);
+      const genreId = parseInt(slug);
+      const nextPage = currentPage + 1;
+
+      const contentRes = type === 'tv'
+        ? await tmdbService.getTVShowsByGenre(genreId, nextPage)
+        : await tmdbService.getMoviesByGenre(genreId, nextPage);
+
+      setContent(prev => [...prev, ...contentRes.results]);
+      setCurrentPage(nextPage);
+    } catch (error) {
+      console.error('Error loading more content:', error);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [slug, type, currentPage, totalPages, loadingMore]);
+
+  // Infinite scroll
+  const { isFetching } = useInfiniteScroll({
+    hasNextPage: currentPage < totalPages,
+    fetchNextPage,
+    threshold: 200
+  });
 
   const loadMore = async () => {
     if (currentPage >= totalPages || !slug) return;
