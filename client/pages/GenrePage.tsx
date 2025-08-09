@@ -184,24 +184,24 @@ export default function GenrePage() {
       {/* Content Grid */}
       {content.length > 0 ? (
         <>
-          <div className="movies-grid mb-12">
+          <div className="movies-grid mb-8">
             {content.map((item) => (
               <MovieCard key={item.id} movie={item} showHoverCard={true} />
             ))}
           </div>
 
-          {/* Load More Button */}
-          {currentPage < totalPages && (
-            <div className="text-center">
-              <Button 
-                onClick={loadMore}
-                variant="outline" 
-                size="lg" 
-                className="neu-button border-border/50"
-                disabled={loading}
-              >
-                {loading ? 'Loading...' : 'Load More'}
-              </Button>
+          {/* Infinite Scroll Loading Indicator */}
+          {(isFetching || loadingMore) && currentPage < totalPages && (
+            <div className="text-center py-8">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
+              <p className="text-sm text-muted-foreground mt-2">Loading more content...</p>
+            </div>
+          )}
+
+          {/* End of content indicator */}
+          {currentPage >= totalPages && content.length > 0 && (
+            <div className="text-center py-8">
+              <p className="text-sm text-muted-foreground">You've reached the end of the list!</p>
             </div>
           )}
         </>
