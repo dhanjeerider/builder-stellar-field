@@ -106,14 +106,14 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
               </p>
               
               <div className="flex space-x-2 pt-2">
-                <Link 
-                  to={`/watch/${isMovie ? 'movie' : 'tv'}/${movie.id}`}
+                <button
+                  onClick={handlePlayClick}
                   className="flex-1 bg-primary text-primary-foreground text-xs font-medium py-2 px-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center space-x-1"
                 >
                   <Play className="w-3 h-3 fill-current" />
                   <span>Play</span>
-                </Link>
-                <Link 
+                </button>
+                <Link
                   to={linkTo}
                   className="flex-1 bg-muted text-muted-foreground text-xs font-medium py-2 px-3 rounded-lg hover:bg-muted/80 transition-colors flex items-center justify-center space-x-1"
                 >
