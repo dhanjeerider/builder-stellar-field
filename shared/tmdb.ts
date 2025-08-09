@@ -107,9 +107,17 @@ export interface TMDBVideosResponse {
 }
 
 class TMDBService {
-  private async fetchFromTMDB<T>(endpoint: string): Promise<T> {
-    const url = `${TMDB_BASE_URL}${endpoint}${endpoint.includes('?') ? '&' : '?'}api_key=${TMDB_API_KEY}`;
-    
+  private async fetchFromTMDB<T>(endpoint: string, extraParams?: Record<string, string>): Promise<T> {
+    let url = `${TMDB_BASE_URL}${endpoint}${endpoint.includes('?') ? '&' : '?'}api_key=${TMDB_API_KEY}`;
+
+    if (extraParams) {
+      Object.entries(extraParams).forEach(([key, value]) => {
+        if (value) {
+          url += `&${key}=${encodeURIComponent(value)}`;
+        }
+      });
+    }
+
     try {
       const response = await fetch(url);
       if (!response.ok) {
