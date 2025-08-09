@@ -162,14 +162,16 @@
   /* Movie card hover effects */
   .movie-card {
     @apply bg-card hover:bg-card/80 transition-all duration-300 rounded-xl overflow-hidden;
-    box-shadow: 
+    border: 1px solid hsl(var(--border) / 0.3);
+    box-shadow:
       4px 4px 12px hsl(var(--neumorphism-dark) / 0.2),
       -2px -2px 8px hsl(var(--neumorphism-light) / 0.5);
   }
 
   .movie-card:hover {
     transform: translateY(-4px);
-    box-shadow: 
+    border-color: hsl(var(--primary) / 0.4);
+    box-shadow:
       8px 8px 24px hsl(var(--neumorphism-dark) / 0.3),
       -4px -4px 12px hsl(var(--neumorphism-light) / 0.7);
   }
