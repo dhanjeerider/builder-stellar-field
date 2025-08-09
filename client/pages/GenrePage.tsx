@@ -4,7 +4,9 @@ import { ChevronLeft, Filter, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MovieCard } from '@/components/MovieCard';
+import { LanguageSelector } from '@/components/LanguageSelector';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
+import { useLanguage } from '@/hooks/use-language';
 import { tmdbService, TMDBMovie, TMDBTVShow, TMDBGenre } from '@shared/tmdb';
 import { cn } from '@/lib/utils';
 
@@ -14,7 +16,8 @@ export default function GenrePage() {
   const { slug } = useParams<{ slug: string }>();
   const [searchParams] = useSearchParams();
   const type = searchParams.get('type') || 'movie';
-  
+  const { getDiscoverParams } = useLanguage();
+
   const [activeSort, setActiveSort] = useState('Popular');
   const [genre, setGenre] = useState<TMDBGenre | null>(null);
   const [content, setContent] = useState<(TMDBMovie | TMDBTVShow)[]>([]);
@@ -34,11 +37,12 @@ export default function GenrePage() {
         const genreId = parseInt(slug);
 
         // Fetch genre info and content
+        const languageParams = getDiscoverParams();
         const [genresRes, contentRes] = await Promise.all([
           type === 'tv' ? tmdbService.getTVGenres() : tmdbService.getMovieGenres(),
           type === 'tv'
-            ? tmdbService.getTVShowsByGenre(genreId, 1)
-            : tmdbService.getMoviesByGenre(genreId, 1)
+            ? tmdbService.getTVShowsByGenre(genreId, 1, languageParams)
+            : tmdbService.getMoviesByGenre(genreId, 1, languageParams)
         ]);
 
         const foundGenre = genresRes.genres.find(g => g.id === genreId);
@@ -53,7 +57,7 @@ export default function GenrePage() {
     };
 
     fetchGenreContent();
-  }, [slug, type, activeSort]);
+  }, [slug, type, activeSort, getDiscoverParams]);
 
   // Fetch next page
   const fetchNextPage = useCallback(async () => {
@@ -64,9 +68,10 @@ export default function GenrePage() {
       const genreId = parseInt(slug);
       const nextPage = currentPage + 1;
 
+      const languageParams = getDiscoverParams();
       const contentRes = type === 'tv'
-        ? await tmdbService.getTVShowsByGenre(genreId, nextPage)
-        : await tmdbService.getMoviesByGenre(genreId, nextPage);
+        ? await tmdbService.getTVShowsByGenre(genreId, nextPage, languageParams)
+        : await tmdbService.getMoviesByGenre(genreId, nextPage, languageParams);
 
       setContent(prev => [...prev, ...contentRes.results]);
       setCurrentPage(nextPage);
@@ -75,7 +80,7 @@ export default function GenrePage() {
     } finally {
       setLoadingMore(false);
     }
-  }, [slug, type, currentPage, totalPages, loadingMore]);
+  }, [slug, type, currentPage, totalPages, loadingMore, getDiscoverParams]);
 
   // Infinite scroll
   const { isFetching } = useInfiniteScroll({
@@ -155,26 +160,38 @@ export default function GenrePage() {
         </div>
       </div>
 
-      {/* Sort Filter */}
+      {/* Filters */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-4">
             <Filter className="w-5 h-5 text-muted-foreground" />
-            <span className="text-sm font-medium text-muted-foreground">Sort by:</span>
+            <span className="text-sm font-medium text-muted-foreground">Browse by:</span>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4">
+          {/* Language Filter */}
+          <div className="flex items-center space-x-3">
+            <label className="text-sm font-medium text-muted-foreground">Language:</label>
+            <LanguageSelector showLabel={true} className="neu-card-inset" />
           </div>
 
-          <Select value={activeSort} onValueChange={setActiveSort}>
-            <SelectTrigger className="w-48 neu-card-inset">
-              <SelectValue placeholder="Select sorting option" />
-            </SelectTrigger>
-            <SelectContent>
-              {sortOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {/* Sort Filter */}
+          <div className="flex items-center space-x-3">
+            <label className="text-sm font-medium text-muted-foreground">Sort by:</label>
+            <Select value={activeSort} onValueChange={setActiveSort}>
+              <SelectTrigger className="w-48 neu-card-inset">
+                <SelectValue placeholder="Select sorting option" />
+              </SelectTrigger>
+              <SelectContent>
+                {sortOptions.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
