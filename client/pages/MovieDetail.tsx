@@ -124,6 +124,18 @@ export default function MovieDetail() {
   const overview = media.overview;
   const runtime = isMovie ? (media as TMDBMovie).runtime : undefined;
 
+  const toggleWatchlist = () => {
+    const mediaType = isMovie ? 'movie' : 'tv';
+
+    if (inWatchlist) {
+      removeFromWatchlist(media.id, mediaType);
+      setInWatchlist(false);
+    } else {
+      addToWatchlist(media, mediaType);
+      setInWatchlist(true);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       {/* Hero Section with Backdrop */}
