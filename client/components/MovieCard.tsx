@@ -49,9 +49,12 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
             
             {/* Play overlay on hover */}
             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl flex items-center justify-center">
-              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform duration-300">
+              <button
+                onClick={handlePlayClick}
+                className="w-12 h-12 bg-primary rounded-full flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform duration-300 hover:bg-primary/90"
+              >
                 <Play className="w-6 h-6 text-primary-foreground ml-1 fill-current" />
-              </div>
+              </button>
             </div>
 
             {/* Rating badge */}
