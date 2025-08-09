@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, Menu, Download, Sun, Moon, User, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
