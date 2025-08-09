@@ -2,13 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 import { ChevronRight, Filter, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/components/MovieCard';
+import { LanguageSelector } from '@/components/LanguageSelector';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
+import { useLanguage } from '@/hooks/use-language';
 import { tmdbService, TMDBMovie } from '@shared/tmdb';
 import { cn } from '@/lib/utils';
 
 const movieCategories = ['Popular', 'Top Rated', 'Upcoming', 'Now Playing'];
 
 export default function Movies() {
+  const { getDiscoverParams } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('Popular');
   const [movies, setMovies] = useState<TMDBMovie[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +22,7 @@ export default function Movies() {
   // Initial fetch
   useEffect(() => {
     fetchMovies();
-  }, [activeCategory]);
+  }, [activeCategory, getDiscoverParams]);
 
   const fetchMovies = async (page = 1) => {
     try {
@@ -29,22 +32,23 @@ export default function Movies() {
         setLoadingMore(true);
       }
 
+      const languageParams = getDiscoverParams();
       let moviesRes;
       switch (activeCategory) {
         case 'Popular':
-          moviesRes = await tmdbService.getPopularMovies(page);
+          moviesRes = await tmdbService.getPopularMovies(page, languageParams);
           break;
         case 'Top Rated':
-          moviesRes = await tmdbService.getTopRatedMovies(page);
+          moviesRes = await tmdbService.getTopRatedMovies(page, languageParams);
           break;
         case 'Upcoming':
-          moviesRes = await tmdbService.getUpcomingMovies(page);
+          moviesRes = await tmdbService.getUpcomingMovies(page, languageParams);
           break;
         case 'Now Playing':
-          moviesRes = await tmdbService.getNowPlayingMovies(page);
+          moviesRes = await tmdbService.getNowPlayingMovies(page, languageParams);
           break;
         default:
-          moviesRes = await tmdbService.getPopularMovies(page);
+          moviesRes = await tmdbService.getPopularMovies(page, languageParams);
       }
 
       if (page === 1) {
@@ -121,13 +125,20 @@ export default function Movies() {
         </p>
       </div>
 
-      {/* Category Filter */}
+      {/* Browse Filters */}
       <div className="mb-8">
         <div className="flex items-center space-x-4 mb-4">
           <Filter className="w-5 h-5 text-muted-foreground" />
           <span className="text-sm font-medium text-muted-foreground">Browse by:</span>
         </div>
-        
+
+        {/* Language Filter */}
+        <div className="flex items-center space-x-3 mb-4">
+          <label className="text-sm font-medium text-muted-foreground">Language:</label>
+          <LanguageSelector showLabel={true} className="neu-card-inset" />
+        </div>
+
+        {/* Category Filter */}
         <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-2">
           {movieCategories.map((category) => (
             <Button
@@ -136,8 +147,8 @@ export default function Movies() {
               size="sm"
               className={cn(
                 "flex-none neu-button border-border/50",
-                activeCategory === category 
-                  ? "bg-primary text-primary-foreground" 
+                activeCategory === category
+                  ? "bg-primary text-primary-foreground"
                   : "bg-background text-foreground hover:bg-muted/50"
               )}
               onClick={() => handleCategoryChange(category)}
