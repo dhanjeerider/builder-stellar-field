@@ -98,6 +98,49 @@ export default function Index() {
     }
   };
 
+  const loadMoreContent = async () => {
+    if (loadingMore || currentPage >= totalPages) return;
+
+    try {
+      setLoadingMore(true);
+      const nextPage = currentPage + 1;
+
+      if (activeTab === 'movies') {
+        let moviesRes;
+        switch (activeCategory) {
+          case 'Popular':
+            moviesRes = await tmdbService.getPopularMovies(nextPage);
+            setPopularMovies(prev => [...prev, ...moviesRes.results]);
+            break;
+          case 'Top Rated':
+            moviesRes = await tmdbService.getTopRatedMovies(nextPage);
+            setTopRatedMovies(prev => [...prev, ...moviesRes.results]);
+            break;
+          case 'Upcoming':
+            moviesRes = await tmdbService.getUpcomingMovies(nextPage);
+            setUpcomingMovies(prev => [...prev, ...moviesRes.results]);
+            break;
+          case 'Now Playing':
+            moviesRes = await tmdbService.getNowPlayingMovies(nextPage);
+            setNowPlayingMovies(prev => [...prev, ...moviesRes.results]);
+            break;
+        }
+      } else if (activeTab === 'tv') {
+        const tvRes = await tmdbService.getPopularTVShows(nextPage);
+        setPopularTVShows(prev => [...prev, ...tvRes.results]);
+      } else if (activeTab === 'trending') {
+        const trendingRes = await tmdbService.getTrendingAll();
+        setTrendingContent(prev => [...prev, ...trendingRes.results]);
+      }
+
+      setCurrentPage(nextPage);
+    } catch (error) {
+      console.error('Error loading more content:', error);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen">
