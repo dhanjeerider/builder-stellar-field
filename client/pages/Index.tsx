@@ -334,13 +334,17 @@ export default function Index() {
         {/* Additional Sliders */}
         {activeTab === 'movies' && popularMovies.length > 0 && (
           <>
-            <MovieSlider 
-              title="Trending Movies" 
-              movies={popularMovies.slice(0, 20)} 
+            <MovieSlider
+              title="Trending Movies"
+              movies={popularMovies.slice(0, 20)}
+              viewAllLink="/movies"
+              viewAllText="View All Movies"
             />
-            <MovieSlider 
-              title="Top Rated Movies" 
-              movies={topRatedMovies.slice(0, 20)} 
+            <MovieSlider
+              title="Top Rated Movies"
+              movies={topRatedMovies.slice(0, 20)}
+              viewAllLink="/movies"
+              viewAllText="View All Movies"
             />
           </>
         )}
