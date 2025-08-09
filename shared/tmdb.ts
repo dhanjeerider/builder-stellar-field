@@ -135,16 +135,16 @@ class TMDBService {
     return this.fetchFromTMDB(`/movie/popular?page=${page}`, languageParams);
   }
 
-  async getTopRatedMovies(page = 1): Promise<TMDBSearchResponse<TMDBMovie>> {
-    return this.fetchFromTMDB(`/movie/top_rated?page=${page}`);
+  async getTopRatedMovies(page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBMovie>> {
+    return this.fetchFromTMDB(`/movie/top_rated?page=${page}`, languageParams);
   }
 
-  async getUpcomingMovies(page = 1): Promise<TMDBSearchResponse<TMDBMovie>> {
-    return this.fetchFromTMDB(`/movie/upcoming?page=${page}`);
+  async getUpcomingMovies(page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBMovie>> {
+    return this.fetchFromTMDB(`/movie/upcoming?page=${page}`, languageParams);
   }
 
-  async getNowPlayingMovies(page = 1): Promise<TMDBSearchResponse<TMDBMovie>> {
-    return this.fetchFromTMDB(`/movie/now_playing?page=${page}`);
+  async getNowPlayingMovies(page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBMovie>> {
+    return this.fetchFromTMDB(`/movie/now_playing?page=${page}`, languageParams);
   }
 
   async getMovieDetails(movieId: number): Promise<TMDBMovie> {
@@ -163,13 +163,13 @@ class TMDBService {
     return this.fetchFromTMDB(`/movie/${movieId}/similar`);
   }
 
-  async getMoviesByGenre(genreId: number, page = 1): Promise<TMDBSearchResponse<TMDBMovie>> {
-    return this.fetchFromTMDB(`/discover/movie?with_genres=${genreId}&page=${page}&sort_by=popularity.desc`);
+  async getMoviesByGenre(genreId: number, page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBMovie>> {
+    return this.fetchFromTMDB(`/discover/movie?with_genres=${genreId}&page=${page}&sort_by=popularity.desc`, languageParams);
   }
 
   // TV Shows
-  async getPopularTVShows(page = 1): Promise<TMDBSearchResponse<TMDBTVShow>> {
-    return this.fetchFromTMDB(`/tv/popular?page=${page}`);
+  async getPopularTVShows(page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBTVShow>> {
+    return this.fetchFromTMDB(`/tv/popular?page=${page}`, languageParams);
   }
 
   async getTopRatedTVShows(page = 1): Promise<TMDBSearchResponse<TMDBTVShow>> {
@@ -200,8 +200,8 @@ class TMDBService {
     return this.fetchFromTMDB(`/tv/${tvId}/similar`);
   }
 
-  async getTVShowsByGenre(genreId: number, page = 1): Promise<TMDBSearchResponse<TMDBTVShow>> {
-    return this.fetchFromTMDB(`/discover/tv?with_genres=${genreId}&page=${page}&sort_by=popularity.desc`);
+  async getTVShowsByGenre(genreId: number, page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBTVShow>> {
+    return this.fetchFromTMDB(`/discover/tv?with_genres=${genreId}&page=${page}&sort_by=popularity.desc`, languageParams);
   }
 
   async getTVSeasonDetails(tvId: number, seasonNumber: number): Promise<TMDBSeason> {
