@@ -26,6 +26,9 @@ export default function Index() {
   const [popularTVShows, setPopularTVShows] = useState<TMDBTVShow[]>([]);
   const [trendingContent, setTrendingContent] = useState<(TMDBMovie | TMDBTVShow)[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
