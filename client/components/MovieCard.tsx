@@ -13,11 +13,18 @@ interface MovieCardProps {
 
 export function MovieCard({ movie, className, showHoverCard = false }: MovieCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
   const isMovie = 'title' in movie;
   const title = isMovie ? movie.title : movie.name;
   const releaseDate = isMovie ? movie.release_date : movie.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : '';
   const linkTo = isMovie ? `/movie/${movie.id}` : `/tv/${movie.id}`;
+
+  const handlePlayClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsPlayerOpen(true);
+  };
 
   return (
     <div 
