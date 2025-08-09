@@ -198,7 +198,7 @@ export default function Index() {
     <div className="min-h-screen">
       {/* Featured Hero Section */}
       {featuredMovie && (
-        <section className="relative h-[70vh] overflow-hidden">
+        <section className="relative h-[85vh] overflow-hidden">
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${getBackdropUrl(featuredMovie.backdrop_path, 'original')})` }}
