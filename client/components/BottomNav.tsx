@@ -1,14 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Play, Tv, Settings, Info, MoreHorizontal } from 'lucide-react';
+import { Home, Play, Tv, Grid3X3, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Explore', href: '/', icon: Home },
   { name: 'Movies', href: '/movies', icon: Play },
   { name: 'TV Shows', href: '/tv', icon: Tv },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Genres', href: '/genres', icon: Grid3X3 },
   { name: 'FAQs', href: '/faqs', icon: Info },
-  { name: 'More', href: '/more', icon: MoreHorizontal },
 ];
 
 export function BottomNav() {
