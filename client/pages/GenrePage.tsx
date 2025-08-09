@@ -83,23 +83,6 @@ export default function GenrePage() {
     threshold: 200
   });
 
-  const loadMore = async () => {
-    if (currentPage >= totalPages || !slug) return;
-    
-    try {
-      const genreId = parseInt(slug);
-      const nextPage = currentPage + 1;
-      
-      const contentRes = type === 'tv' 
-        ? await tmdbService.getTVShowsByGenre(genreId, nextPage)
-        : await tmdbService.getMoviesByGenre(genreId, nextPage);
-      
-      setContent(prev => [...prev, ...contentRes.results]);
-      setCurrentPage(nextPage);
-    } catch (error) {
-      console.error('Error loading more content:', error);
-    }
-  };
 
   if (loading && content.length === 0) {
     return (
