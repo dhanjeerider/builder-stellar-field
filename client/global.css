@@ -47,6 +47,14 @@
     --sidebar-accent-foreground: 0 0% 95%;
     --sidebar-border: 220 20% 25%;
     --sidebar-ring: 34 100% 50%;
+
+    /* Movie-specific colors */
+    --movie-bg: 220 26% 12%;
+    --movie-card: 224 25% 16%;
+    --movie-card-hover: 224 25% 18%;
+    --rating-star: 45 100% 60%;
+    --genre-tag: 220 20% 25%;
+    --quality-badge: 120 60% 50%;
   }
 
   .dark {
@@ -96,5 +104,27 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply dark;
+  }
+}
+
+@layer components {
+  .movie-card {
+    @apply bg-card hover:bg-[hsl(var(--movie-card-hover))] transition-all duration-200 rounded-lg overflow-hidden;
+  }
+
+  .rating-star {
+    @apply text-[hsl(var(--rating-star))];
+  }
+
+  .quality-badge {
+    @apply bg-[hsl(var(--quality-badge))] text-black text-xs font-bold px-2 py-1 rounded;
+  }
+
+  .genre-tag {
+    @apply bg-[hsl(var(--genre-tag))] text-foreground text-xs px-2 py-1 rounded-full;
   }
 }
