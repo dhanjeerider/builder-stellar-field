@@ -77,14 +77,17 @@ export function Header() {
       {/* Mobile Search */}
       {isSearchOpen && (
         <div className="md:hidden px-4 pb-4">
-          <div className="relative">
+          <form onSubmit={handleSearch} className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               type="search"
               placeholder="Search movies, TV shows..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 bg-muted/50 border-border"
+              autoFocus
             />
-          </div>
+          </form>
         </div>
       )}
     </header>
