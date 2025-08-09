@@ -94,17 +94,7 @@ export function Header() {
           <div className="flex items-center space-x-2">
             {/* Search (Desktop) */}
             <div className="hidden md:flex">
-              <form onSubmit={handleSearch} className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  type="search"
-                  placeholder="Search movies, TV shows..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  className="w-64 pl-10 pr-4 neu-card-inset bg-background/50 border-0"
-                />
-              </form>
+              <LiveSearch className="w-64" />
             </div>
             
             <Button 
