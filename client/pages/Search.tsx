@@ -182,7 +182,7 @@ export default function Search() {
       {!query && trendingContent.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-6 flex items-center space-x-2">
-            <Trending className="w-5 h-5" />
+            <TrendingUp className="w-5 h-5" />
             <span>Trending Now</span>
           </h2>
           <div className="movies-grid">
