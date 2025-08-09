@@ -125,6 +125,14 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
           </div>
         </div>
       )}
+
+      {/* Video Player Modal */}
+      <VideoPlayerModal
+        isOpen={isPlayerOpen}
+        onClose={() => setIsPlayerOpen(false)}
+        media={movie}
+        type={isMovie ? 'movie' : 'tv'}
+      />
     </div>
   );
 }
