@@ -87,23 +87,23 @@ export function VideoPlayerModal({ isOpen, onClose, media, type }: VideoPlayerMo
           <div className="flex items-center justify-between">
             <DialogTitle className="text-lg font-semibold">{title}</DialogTitle>
             <div className="flex items-center space-x-2">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="icon"
                 onClick={() => setIsFullscreen(!isFullscreen)}
+                title="Toggle Fullscreen"
               >
                 <Maximize2 className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon">
-                <Download className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="icon">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleShare}
+                title="Share"
+              >
                 <Share2 className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon">
-                <Settings className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="icon" onClick={onClose}>
+              <Button variant="ghost" size="icon" onClick={onClose} title="Close">
                 <X className="h-4 w-4" />
               </Button>
             </div>
