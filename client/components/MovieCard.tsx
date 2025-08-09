@@ -15,16 +15,36 @@ interface MovieCardProps {
 export function MovieCard({ movie, className, showHoverCard = false }: MovieCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
+  const [inWatchlist, setInWatchlist] = useState(false);
   const isMovie = 'title' in movie;
   const title = isMovie ? movie.title : movie.name;
   const releaseDate = isMovie ? movie.release_date : movie.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : '';
   const linkTo = isMovie ? `/movie/${movie.id}` : `/tv/${movie.id}`;
 
+  useEffect(() => {
+    const mediaType = isMovie ? 'movie' : 'tv';
+    setInWatchlist(isInWatchlist(movie.id, mediaType));
+  }, [movie.id, isMovie]);
+
   const handlePlayClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsPlayerOpen(true);
+  };
+
+  const handleWatchlistClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const mediaType = isMovie ? 'movie' : 'tv';
+
+    if (inWatchlist) {
+      // Would need removeFromWatchlist but let's just add for now
+      setInWatchlist(false);
+    } else {
+      addToWatchlist(movie, mediaType);
+      setInWatchlist(true);
+    }
   };
 
   return (
