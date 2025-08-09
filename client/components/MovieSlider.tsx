@@ -55,7 +55,15 @@ export function MovieSlider({
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold">{title}</h2>
-          <div className="flex space-x-2">
+          <div className="flex items-center space-x-2">
+            {viewAllLink && (
+              <Button variant="outline" size="sm" className="neu-button" asChild>
+                <Link to={viewAllLink} className="flex items-center space-x-1">
+                  <span>{viewAllText}</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            )}
             <Button
               variant="outline"
               size="icon"
