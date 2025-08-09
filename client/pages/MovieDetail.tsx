@@ -15,6 +15,7 @@ export default function MovieDetail() {
   const [similarContent, setSimilarContent] = useState<(TMDBMovie | TMDBTVShow)[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
 
   useEffect(() => {
     const fetchMediaDetails = async () => {
