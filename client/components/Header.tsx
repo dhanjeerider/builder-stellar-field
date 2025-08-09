@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, Menu, Sun, Moon, X, Bookmark } from 'lucide-react';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
+import { LiveSearch } from './LiveSearch';
 import { WatchlistModal } from './WatchlistModal';
 import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
