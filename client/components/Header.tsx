@@ -67,20 +67,23 @@ export function Header() {
 
           {/* Center - Navigation (Desktop) */}
           <nav className="hidden lg:flex items-center space-x-1 bg-muted/30 rounded-xl p-1">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                  item.active 
-                    ? "bg-background text-foreground neu-card-inset" 
-                    : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navigationItems.map((item) => {
+              const isActive = location.pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={cn(
+                    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                    isActive
+                      ? "bg-background text-foreground neu-card-inset"
+                      : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                  )}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Right side - Search and Actions */}
