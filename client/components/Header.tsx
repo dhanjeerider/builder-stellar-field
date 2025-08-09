@@ -116,16 +116,17 @@ export function Header() {
               <Search className="h-5 w-5" />
             </Button>
             
-            <Button variant="ghost" size="icon" className="neu-button">
-              <Download className="h-5 w-5" />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="neu-button"
+              onClick={() => setIsWatchlistOpen(true)}
+            >
+              <Bookmark className="h-5 w-5" />
             </Button>
-            
+
             <Button variant="ghost" size="icon" className="neu-button" onClick={toggleTheme}>
               {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-            </Button>
-            
-            <Button variant="ghost" size="icon" className="neu-button">
-              <User className="h-5 w-5" />
             </Button>
           </div>
         </div>
