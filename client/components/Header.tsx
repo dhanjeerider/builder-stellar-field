@@ -11,6 +11,7 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
   const { theme, setTheme } = useTheme();
 
   const handleSearch = (e: React.FormEvent) => {
