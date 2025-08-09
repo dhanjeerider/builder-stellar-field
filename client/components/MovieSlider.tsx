@@ -13,7 +13,13 @@ interface MovieSliderProps {
   viewAllText?: string;
 }
 
-export function MovieSlider({ title, movies, showHoverCard = false }: MovieSliderProps) {
+export function MovieSlider({
+  title,
+  movies,
+  showHoverCard = false,
+  viewAllLink,
+  viewAllText = "View All"
+}: MovieSliderProps) {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
