@@ -60,7 +60,6 @@ export default function MovieDetail() {
         }
 
         // Check watchlist status
-        const path = window.location.pathname;
         const mediaType = path.includes('/movie/') ? 'movie' : 'tv';
         setInWatchlist(isInWatchlist(mediaId, mediaType));
       } catch (error) {
