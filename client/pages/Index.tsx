@@ -308,12 +308,20 @@ export default function Index() {
           </div>
 
           {/* Load More Button */}
-          <div className="text-center">
-            <Button variant="outline" size="lg" className="neu-button border-border/50">
-              Load More
-              <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+          {currentPage < totalPages && (
+            <div className="text-center">
+              <Button
+                variant="outline"
+                size="lg"
+                className="neu-button border-border/50"
+                onClick={loadMoreContent}
+                disabled={loadingMore}
+              >
+                {loadingMore ? 'Loading...' : 'Load More'}
+                <ChevronRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Additional Sliders */}
