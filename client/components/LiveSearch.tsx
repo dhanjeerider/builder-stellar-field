@@ -147,7 +147,11 @@ export function LiveSearch({
                         </div>
                         <div className="flex items-center space-x-1">
                           <Star className="w-3 h-3 rating-star fill-current" />
-                          <span>{item.vote_average ? item.vote_average.toFixed(1) : 'N/A'}</span>
+                          <span>
+                            {item.vote_average
+                              ? item.vote_average.toFixed(1)
+                              : "N/A"}
+                          </span>
                         </div>
                         <span className="genre-tag">
                           {isMovie ? "Movie" : "TV Show"}
