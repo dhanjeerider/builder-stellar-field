@@ -122,22 +122,11 @@ export function Header() {
         </div>
 
         {/* Mobile Search */}
-        {isSearchOpen && (
-          <div className="md:hidden px-4 pb-4 border-t border-border/50">
-            <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                type="search"
-                placeholder="Search movies, TV shows..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={handleKeyPress}
-                className="w-full pl-10 pr-4 neu-card-inset bg-background/50 border-0"
-                autoFocus
-              />
-            </form>
-          </div>
-        )}
+      {isSearchOpen && (
+        <div className="md:hidden px-4 pb-4 border-t border-border/50">
+          <LiveSearch className="w-full" />
+        </div>
+      )}
       </header>
 
       {/* Mobile Navigation Menu */}
