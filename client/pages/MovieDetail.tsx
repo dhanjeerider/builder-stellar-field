@@ -58,6 +58,11 @@ export default function MovieDetail() {
           setVideos(videosRes.results.filter(v => v.type === 'Trailer').slice(0, 3));
           setSimilarContent(similar.results.slice(0, 20));
         }
+
+        // Check watchlist status
+        const path = window.location.pathname;
+        const mediaType = path.includes('/movie/') ? 'movie' : 'tv';
+        setInWatchlist(isInWatchlist(mediaId, mediaType));
       } catch (error) {
         console.error('Error fetching media details:', error);
         setError('Failed to load content details');
