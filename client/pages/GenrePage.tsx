@@ -2,6 +2,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, Filter, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MovieCard } from '@/components/MovieCard';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { tmdbService, TMDBMovie, TMDBTVShow, TMDBGenre } from '@shared/tmdb';
