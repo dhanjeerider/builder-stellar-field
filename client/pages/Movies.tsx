@@ -1,33 +1,99 @@
-import { useState } from 'react';
-import { CategoryFilter } from '@/components/CategoryFilter';
+import { useState, useEffect } from 'react';
+import { ChevronRight, Filter } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/components/MovieCard';
-import { MOCK_MOVIES } from '@shared/mockData';
+import { tmdbService, TMDBMovie } from '@shared/tmdb';
+import { cn } from '@/lib/utils';
 
-const movieCategories = ['Popular', 'Top Rated', 'Upcoming', 'Now Playing', 'Latest'];
+const movieCategories = ['Popular', 'Top Rated', 'Upcoming', 'Now Playing'];
 
 export default function Movies() {
   const [activeCategory, setActiveCategory] = useState('Popular');
+  const [movies, setMovies] = useState<TMDBMovie[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const getMoviesByCategory = () => {
-    const movies = [...MOCK_MOVIES];
-    
-    switch (activeCategory) {
-      case 'Popular':
-        return movies.sort((a, b) => b.rating - a.rating);
-      case 'Top Rated':
-        return movies.filter(m => m.rating >= 6.0).sort((a, b) => b.rating - a.rating);
-      case 'Upcoming':
-        return movies.filter(m => m.year >= 2025).sort((a, b) => b.year - a.year);
-      case 'Now Playing':
-        return movies.slice(0, 12);
-      case 'Latest':
-        return movies.sort((a, b) => b.year - a.year);
-      default:
-        return movies;
+  useEffect(() => {
+    fetchMovies();
+  }, [activeCategory]);
+
+  const fetchMovies = async (page = 1) => {
+    try {
+      setLoading(true);
+      
+      let moviesRes;
+      switch (activeCategory) {
+        case 'Popular':
+          moviesRes = await tmdbService.getPopularMovies(page);
+          break;
+        case 'Top Rated':
+          moviesRes = await tmdbService.getTopRatedMovies(page);
+          break;
+        case 'Upcoming':
+          moviesRes = await tmdbService.getUpcomingMovies(page);
+          break;
+        case 'Now Playing':
+          moviesRes = await tmdbService.getNowPlayingMovies(page);
+          break;
+        default:
+          moviesRes = await tmdbService.getPopularMovies(page);
+      }
+
+      if (page === 1) {
+        setMovies(moviesRes.results);
+      } else {
+        setMovies(prev => [...prev, ...moviesRes.results]);
+      }
+      
+      setCurrentPage(page);
+      setTotalPages(moviesRes.total_pages);
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const filteredMovies = getMoviesByCategory();
+  const loadMore = () => {
+    if (currentPage < totalPages) {
+      fetchMovies(currentPage + 1);
+    }
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    setCurrentPage(1);
+  };
+
+  if (loading && movies.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <div className="h-8 bg-muted animate-pulse rounded w-32 mb-2" />
+          <div className="h-4 bg-muted animate-pulse rounded w-64" />
+        </div>
+
+        <div className="flex space-x-2 mb-8">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={index} className="h-8 bg-muted animate-pulse rounded w-24" />
+          ))}
+        </div>
+
+        <div className="movies-grid">
+          {Array.from({ length: 20 }).map((_, index) => (
+            <div key={index} className="animate-pulse">
+              <div className="bg-muted aspect-[2/3] rounded-xl mb-3" />
+              <div className="space-y-2">
+                <div className="h-4 bg-muted rounded w-3/4" />
+                <div className="h-3 bg-muted rounded w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -35,31 +101,67 @@ export default function Movies() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Movies</h1>
         <p className="text-muted-foreground">
-          Discover the latest and greatest movies
+          Discover the latest and greatest movies from around the world
         </p>
       </div>
 
       {/* Category Filter */}
       <div className="mb-8">
-        <CategoryFilter
-          categories={movieCategories}
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
-        />
+        <div className="flex items-center space-x-4 mb-4">
+          <Filter className="w-5 h-5 text-muted-foreground" />
+          <span className="text-sm font-medium text-muted-foreground">Browse by:</span>
+        </div>
+        
+        <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-2">
+          {movieCategories.map((category) => (
+            <Button
+              key={category}
+              variant={activeCategory === category ? "default" : "outline"}
+              size="sm"
+              className={cn(
+                "flex-none neu-button border-border/50",
+                activeCategory === category 
+                  ? "bg-primary text-primary-foreground" 
+                  : "bg-background text-foreground hover:bg-muted/50"
+              )}
+              onClick={() => handleCategoryChange(category)}
+            >
+              {category}
+            </Button>
+          ))}
+        </div>
       </div>
 
       {/* Movies Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-        {filteredMovies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
-      </div>
+      <div className="space-y-8">
+        <div>
+          <h2 className="text-xl font-semibold mb-6 flex items-center space-x-2">
+            <span>{activeCategory} Movies</span>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </h2>
+          
+          <div className="movies-grid">
+            {movies.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} showHoverCard={true} />
+            ))}
+          </div>
+        </div>
 
-      {/* Load More Button */}
-      <div className="text-center mt-12">
-        <button className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
-          Load More Movies
-        </button>
+        {/* Load More Button */}
+        {currentPage < totalPages && (
+          <div className="text-center">
+            <Button 
+              onClick={loadMore}
+              variant="outline" 
+              size="lg" 
+              className="neu-button border-border/50"
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Load More Movies'}
+              <ChevronRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
