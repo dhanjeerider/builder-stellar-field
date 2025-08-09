@@ -12,17 +12,23 @@ export default function Movies() {
   const [activeCategory, setActiveCategory] = useState('Popular');
   const [movies, setMovies] = useState<TMDBMovie[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  // Initial fetch
   useEffect(() => {
     fetchMovies();
   }, [activeCategory]);
 
   const fetchMovies = async (page = 1) => {
     try {
-      setLoading(true);
-      
+      if (page === 1) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
+
       let moviesRes;
       switch (activeCategory) {
         case 'Popular':
@@ -43,24 +49,33 @@ export default function Movies() {
 
       if (page === 1) {
         setMovies(moviesRes.results);
+        setCurrentPage(1);
       } else {
         setMovies(prev => [...prev, ...moviesRes.results]);
+        setCurrentPage(page);
       }
-      
-      setCurrentPage(page);
+
       setTotalPages(moviesRes.total_pages);
     } catch (error) {
       console.error('Error fetching movies:', error);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
-  const loadMore = () => {
-    if (currentPage < totalPages) {
-      fetchMovies(currentPage + 1);
-    }
-  };
+  // Fetch next page
+  const fetchNextPage = useCallback(async () => {
+    if (currentPage >= totalPages || loadingMore) return;
+    await fetchMovies(currentPage + 1);
+  }, [currentPage, totalPages, loadingMore, activeCategory]);
+
+  // Infinite scroll
+  const { isFetching } = useInfiniteScroll({
+    hasNextPage: currentPage < totalPages,
+    fetchNextPage,
+    threshold: 200
+  });
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
