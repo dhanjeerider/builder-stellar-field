@@ -56,6 +56,10 @@ export default function Index() {
         if (popularRes.results.length > 0) {
           setFeaturedMovie(popularRes.results[0]);
         }
+
+        // Set pagination info
+        setCurrentPage(1);
+        setTotalPages(popularRes.total_pages);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
