@@ -116,6 +116,8 @@ export function Header() {
               <Bookmark className="h-5 w-5" />
             </Button>
 
+            <LanguageSelector />
+
             <Button variant="ghost" size="icon" className="neu-button" onClick={toggleTheme}>
               {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </Button>
