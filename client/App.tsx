@@ -43,7 +43,7 @@ const App = () => (
               <Route path="/genres" element={<Genres />} />
               <Route path="/genre/:slug" element={<GenrePage />} />
               <Route path="/settings" element={<PlaceholderPage title="Settings" />} />
-              <Route path="/faqs" element={<PlaceholderPage title="FAQs" />} />
+              <Route path="/faqs" element={<FAQ />} />
               <Route path="/more" element={<PlaceholderPage title="More" />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
