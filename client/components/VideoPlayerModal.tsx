@@ -51,6 +51,35 @@ export function VideoPlayerModal({ isOpen, onClose, media, type }: VideoPlayerMo
 
   const title = isMovie ? (media as TMDBMovie).title : (media as TMDBTVShow).name;
 
+  const handleShare = async () => {
+    const shareData = {
+      title: `Watch ${title} on MovieStream`,
+      text: `Check out ${title} on MovieStream!`,
+      url: window.location.href
+    };
+
+    try {
+      if (navigator.share) {
+        // Use Web Share API if available (mobile devices)
+        await navigator.share(shareData);
+      } else {
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(shareData.url);
+        // You could show a toast notification here
+        alert('Link copied to clipboard!');
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      // Fallback: copy to clipboard
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        alert('Link copied to clipboard!');
+      } catch (clipboardError) {
+        console.error('Clipboard error:', clipboardError);
+      }
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className={`max-w-7xl ${isFullscreen ? 'h-screen' : 'max-h-[90vh]'} p-0 overflow-hidden`}>
