@@ -315,19 +315,18 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Load More Button */}
-          {currentPage < totalPages && (
-            <div className="text-center">
-              <Button
-                variant="outline"
-                size="lg"
-                className="neu-button border-border/50"
-                onClick={loadMoreContent}
-                disabled={loadingMore}
-              >
-                {loadingMore ? 'Loading...' : 'Load More'}
-                <ChevronRight className="w-4 h-4 ml-2" />
-              </Button>
+          {/* Infinite Scroll Loading Indicator */}
+          {(isFetching || loadingMore) && currentPage < totalPages && (
+            <div className="text-center py-8">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary mb-2" />
+              <p className="text-sm text-muted-foreground">Loading more content...</p>
+            </div>
+          )}
+
+          {/* End of content indicator */}
+          {currentPage >= totalPages && getCurrentContent().length > 0 && (
+            <div className="text-center py-8">
+              <p className="text-sm text-muted-foreground">You've reached the end!</p>
             </div>
           )}
         </div>
