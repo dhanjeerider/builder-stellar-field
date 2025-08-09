@@ -17,6 +17,7 @@ import Search from "./pages/Search";
 import GenrePage from "./pages/GenrePage";
 import Genres from "./pages/Genres";
 import Watch from "./pages/Watch";
+import FAQ from "./pages/FAQ";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
