@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, TrendingUp, Star, Calendar, Play, Loader2 } from 'lucide-react';
+import { ChevronRight, TrendingUp, Star, Calendar, Play, Loader2, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/components/MovieCard';
 import { MovieSlider } from '@/components/MovieSlider';
+import { LanguageSelector } from '@/components/LanguageSelector';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { useLanguage } from '@/hooks/use-language';
 import { tmdbService, TMDBMovie, TMDBTVShow, getImageUrl, getBackdropUrl } from '@shared/tmdb';
@@ -275,9 +276,25 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Category Filter (for movies tab) */}
+        {/* Browse Filters */}
         {activeTab === 'movies' && (
           <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <Filter className="w-5 h-5 text-muted-foreground" />
+                <span className="text-sm font-medium text-muted-foreground">Browse by:</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 mb-4">
+              {/* Language Filter */}
+              <div className="flex items-center space-x-3">
+                <label className="text-sm font-medium text-muted-foreground">Language:</label>
+                <LanguageSelector showLabel={true} className="neu-card-inset" />
+              </div>
+            </div>
+
+            {/* Category Filter */}
             <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-2">
               {movieCategories.map((category) => (
                 <Button
@@ -286,8 +303,8 @@ export default function Index() {
                   size="sm"
                   className={cn(
                     "flex-none neu-button border-border/50",
-                    activeCategory === category 
-                      ? "bg-primary text-primary-foreground" 
+                    activeCategory === category
+                      ? "bg-primary text-primary-foreground"
                       : "bg-background text-foreground hover:bg-muted/50"
                   )}
                   onClick={() => setActiveCategory(category)}
@@ -362,9 +379,9 @@ export default function Index() {
             />
             {bollywoodMovies.length > 0 && (
               <MovieSlider
-                title="Bollywood Hindi Movies"
+                title="Popular Hindi Movies"
                 movies={bollywoodMovies.slice(0, 20)}
-                viewAllLink="/genre/7?type=movie"
+                viewAllLink="/movies"
                 viewAllText="View All Hindi Movies"
               />
             )}
