@@ -1,33 +1,99 @@
-import { useState } from 'react';
-import { CategoryFilter } from '@/components/CategoryFilter';
+import { useState, useEffect } from 'react';
+import { ChevronRight, Filter } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/components/MovieCard';
-import { MOCK_TV_SHOWS } from '@shared/mockData';
+import { tmdbService, TMDBTVShow } from '@shared/tmdb';
+import { cn } from '@/lib/utils';
 
-const tvCategories = ['Popular', 'Top Rated', 'Airing Today', 'On The Air', 'Latest'];
+const tvCategories = ['Popular', 'Top Rated', 'Airing Today', 'On The Air'];
 
 export default function TVShows() {
   const [activeCategory, setActiveCategory] = useState('Popular');
+  const [shows, setShows] = useState<TMDBTVShow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const getTVShowsByCategory = () => {
-    const shows = [...MOCK_TV_SHOWS];
-    
-    switch (activeCategory) {
-      case 'Popular':
-        return shows.sort((a, b) => b.rating - a.rating);
-      case 'Top Rated':
-        return shows.filter(s => s.rating >= 7.0).sort((a, b) => b.rating - a.rating);
-      case 'Airing Today':
-        return shows.slice(0, 8);
-      case 'On The Air':
-        return shows.filter(s => s.year >= 2024);
-      case 'Latest':
-        return shows.sort((a, b) => b.year - a.year);
-      default:
-        return shows;
+  useEffect(() => {
+    fetchTVShows();
+  }, [activeCategory]);
+
+  const fetchTVShows = async (page = 1) => {
+    try {
+      setLoading(true);
+      
+      let showsRes;
+      switch (activeCategory) {
+        case 'Popular':
+          showsRes = await tmdbService.getPopularTVShows(page);
+          break;
+        case 'Top Rated':
+          showsRes = await tmdbService.getTopRatedTVShows(page);
+          break;
+        case 'Airing Today':
+          showsRes = await tmdbService.getAiringTodayTVShows(page);
+          break;
+        case 'On The Air':
+          showsRes = await tmdbService.getOnTheAirTVShows(page);
+          break;
+        default:
+          showsRes = await tmdbService.getPopularTVShows(page);
+      }
+
+      if (page === 1) {
+        setShows(showsRes.results);
+      } else {
+        setShows(prev => [...prev, ...showsRes.results]);
+      }
+      
+      setCurrentPage(page);
+      setTotalPages(showsRes.total_pages);
+    } catch (error) {
+      console.error('Error fetching TV shows:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const filteredShows = getTVShowsByCategory();
+  const loadMore = () => {
+    if (currentPage < totalPages) {
+      fetchTVShows(currentPage + 1);
+    }
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    setCurrentPage(1);
+  };
+
+  if (loading && shows.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <div className="h-8 bg-muted animate-pulse rounded w-32 mb-2" />
+          <div className="h-4 bg-muted animate-pulse rounded w-64" />
+        </div>
+
+        <div className="flex space-x-2 mb-8">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={index} className="h-8 bg-muted animate-pulse rounded w-24" />
+          ))}
+        </div>
+
+        <div className="movies-grid">
+          {Array.from({ length: 20 }).map((_, index) => (
+            <div key={index} className="animate-pulse">
+              <div className="bg-muted aspect-[2/3] rounded-xl mb-3" />
+              <div className="space-y-2">
+                <div className="h-4 bg-muted rounded w-3/4" />
+                <div className="h-3 bg-muted rounded w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -35,44 +101,68 @@ export default function TVShows() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">TV Shows</h1>
         <p className="text-muted-foreground">
-          Explore amazing TV series and shows
+          Explore amazing TV series and shows from around the world
         </p>
       </div>
 
       {/* Category Filter */}
       <div className="mb-8">
-        <CategoryFilter
-          categories={tvCategories}
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
-        />
+        <div className="flex items-center space-x-4 mb-4">
+          <Filter className="w-5 h-5 text-muted-foreground" />
+          <span className="text-sm font-medium text-muted-foreground">Browse by:</span>
+        </div>
+        
+        <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-2">
+          {tvCategories.map((category) => (
+            <Button
+              key={category}
+              variant={activeCategory === category ? "default" : "outline"}
+              size="sm"
+              className={cn(
+                "flex-none neu-button border-border/50",
+                activeCategory === category 
+                  ? "bg-primary text-primary-foreground" 
+                  : "bg-background text-foreground hover:bg-muted/50"
+              )}
+              onClick={() => handleCategoryChange(category)}
+            >
+              {category}
+            </Button>
+          ))}
+        </div>
       </div>
 
       {/* TV Shows Grid */}
-      {filteredShows.length > 0 ? (
-        <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {filteredShows.map((show) => (
-              <MovieCard key={show.id} movie={show} />
+      <div className="space-y-8">
+        <div>
+          <h2 className="text-xl font-semibold mb-6 flex items-center space-x-2">
+            <span>{activeCategory} TV Shows</span>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </h2>
+          
+          <div className="movies-grid">
+            {shows.map((show) => (
+              <MovieCard key={show.id} movie={show} showHoverCard={true} />
             ))}
           </div>
-
-          {/* Load More Button */}
-          <div className="text-center mt-12">
-            <button className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
-              Load More TV Shows
-            </button>
-          </div>
-        </>
-      ) : (
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4">📺</div>
-          <h3 className="text-xl font-semibold mb-2">No TV shows found</h3>
-          <p className="text-muted-foreground">
-            Check back later for new TV series and episodes.
-          </p>
         </div>
-      )}
+
+        {/* Load More Button */}
+        {currentPage < totalPages && (
+          <div className="text-center">
+            <Button 
+              onClick={loadMore}
+              variant="outline" 
+              size="lg" 
+              className="neu-button border-border/50"
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Load More TV Shows'}
+              <ChevronRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
