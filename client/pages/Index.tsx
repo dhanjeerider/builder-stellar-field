@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/components/MovieCard';
 import { MovieSlider } from '@/components/MovieSlider';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
+import { useLanguage } from '@/hooks/use-language';
 import { tmdbService, TMDBMovie, TMDBTVShow, getImageUrl, getBackdropUrl } from '@shared/tmdb';
 import { cn } from '@/lib/utils';
 
@@ -17,6 +18,7 @@ const tabs = [
 const movieCategories = ['Popular', 'Top Rated', 'Upcoming', 'Now Playing'];
 
 export default function Index() {
+  const { getDiscoverParams } = useLanguage();
   const [activeTab, setActiveTab] = useState('movies');
   const [activeCategory, setActiveCategory] = useState('Popular');
   const [featuredMovie, setFeaturedMovie] = useState<TMDBMovie | null>(null);
@@ -35,14 +37,15 @@ export default function Index() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+        const languageParams = getDiscoverParams();
+
         // Fetch all movie categories
         const [popularRes, topRatedRes, upcomingRes, nowPlayingRes, tvRes, trendingRes] = await Promise.all([
-          tmdbService.getPopularMovies(),
-          tmdbService.getTopRatedMovies(),
-          tmdbService.getUpcomingMovies(),
-          tmdbService.getNowPlayingMovies(),
-          tmdbService.getPopularTVShows(),
+          tmdbService.getPopularMovies(1, languageParams),
+          tmdbService.getTopRatedMovies(1, languageParams),
+          tmdbService.getUpcomingMovies(1, languageParams),
+          tmdbService.getNowPlayingMovies(1, languageParams),
+          tmdbService.getPopularTVShows(1, languageParams),
           tmdbService.getTrendingAll(),
         ]);
 
@@ -69,7 +72,7 @@ export default function Index() {
     };
 
     fetchData();
-  }, []);
+  }, [getDiscoverParams]);
 
   const getCurrentMovies = () => {
     switch (activeCategory) {
@@ -105,29 +108,30 @@ export default function Index() {
     try {
       setLoadingMore(true);
       const nextPage = currentPage + 1;
+      const languageParams = getDiscoverParams();
 
       if (activeTab === 'movies') {
         let moviesRes;
         switch (activeCategory) {
           case 'Popular':
-            moviesRes = await tmdbService.getPopularMovies(nextPage);
+            moviesRes = await tmdbService.getPopularMovies(nextPage, languageParams);
             setPopularMovies(prev => [...prev, ...moviesRes.results]);
             break;
           case 'Top Rated':
-            moviesRes = await tmdbService.getTopRatedMovies(nextPage);
+            moviesRes = await tmdbService.getTopRatedMovies(nextPage, languageParams);
             setTopRatedMovies(prev => [...prev, ...moviesRes.results]);
             break;
           case 'Upcoming':
-            moviesRes = await tmdbService.getUpcomingMovies(nextPage);
+            moviesRes = await tmdbService.getUpcomingMovies(nextPage, languageParams);
             setUpcomingMovies(prev => [...prev, ...moviesRes.results]);
             break;
           case 'Now Playing':
-            moviesRes = await tmdbService.getNowPlayingMovies(nextPage);
+            moviesRes = await tmdbService.getNowPlayingMovies(nextPage, languageParams);
             setNowPlayingMovies(prev => [...prev, ...moviesRes.results]);
             break;
         }
       } else if (activeTab === 'tv') {
-        const tvRes = await tmdbService.getPopularTVShows(nextPage);
+        const tvRes = await tmdbService.getPopularTVShows(nextPage, languageParams);
         setPopularTVShows(prev => [...prev, ...tvRes.results]);
       } else if (activeTab === 'trending') {
         const trendingRes = await tmdbService.getTrendingAll();
@@ -140,7 +144,7 @@ export default function Index() {
     } finally {
       setLoadingMore(false);
     }
-  }, [loadingMore, currentPage, totalPages, activeTab, activeCategory]);
+  }, [loadingMore, currentPage, totalPages, activeTab, activeCategory, getDiscoverParams]);
 
   // Infinite scroll
   const { isFetching } = useInfiniteScroll({
@@ -297,11 +301,18 @@ export default function Index() {
           <div>
             <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
               <span>
-                {activeTab === 'movies' ? `${activeCategory} Movies` : 
-                 activeTab === 'tv' ? 'Popular TV Shows' : 
+                {activeTab === 'movies' ? `${activeCategory} Movies` :
+                 activeTab === 'tv' ? 'Popular TV Shows' :
                  'Trending Now'}
               </span>
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              {activeTab === 'movies' && activeCategory === 'Popular' && (
+                <Link to="/movies" className="ml-auto">
+                  <Button variant="outline" size="sm" className="neu-button border-border/50">
+                    Show More
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              )}
             </h2>
             
             <div className="movies-grid">
