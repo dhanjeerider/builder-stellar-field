@@ -91,6 +91,12 @@ export const GENRES: Genre[] = [
 
 export const SERVERS: Server[] = [
   {
+    name: "Download Server",
+    type: "tmdb",
+    url: "https://dl.vidsrc.vip/movie/{tmdb_id}",
+    url_tv: "https://dl.vidsrc.vip/tv/{tmdb_id}/{season}"
+  },
+  {
     name: "change server if not playing",
     type: "imdb",
     url: "https://vidsrc.vip/embed/movie/{imdb_id}",
