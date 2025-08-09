@@ -61,10 +61,10 @@ export function Header() {
             
             <Link to="/" className="flex items-center space-x-3">
               <div className="w-10 h-10 neu-card flex items-center justify-center bg-primary">
-                <span className="text-primary-foreground font-bold text-xl">M</span>
+                <span className="text-primary-foreground font-bold text-xl">R</span>
               </div>
               <span className="hidden sm:block text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                MovieStream
+                Rider Movies
               </span>
             </Link>
           </div>
