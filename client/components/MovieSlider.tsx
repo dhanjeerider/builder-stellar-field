@@ -9,6 +9,8 @@ interface MovieSliderProps {
   title: string;
   movies: (TMDBMovie | TMDBTVShow)[];
   showHoverCard?: boolean;
+  viewAllLink?: string;
+  viewAllText?: string;
 }
 
 export function MovieSlider({ title, movies, showHoverCard = false }: MovieSliderProps) {
