@@ -34,10 +34,10 @@ export function Header() {
   };
 
   const navigationItems = [
-    { name: 'Home', href: '/', active: true },
-    { name: 'Movies', href: '/movies', active: false },
-    { name: 'TV Shows', href: '/tv', active: false },
-    { name: 'Genres', href: '/genres', active: false },
+    { name: 'Home', href: '/' },
+    { name: 'Movies', href: '/movies' },
+    { name: 'TV Shows', href: '/tv' },
+    { name: 'Genres', href: '/genres' },
   ];
 
   return (
