@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, TrendingUp, Star, Calendar, Play } from 'lucide-react';
+import { ChevronRight, TrendingUp, Star, Calendar, Play, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/components/MovieCard';
 import { MovieSlider } from '@/components/MovieSlider';
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { tmdbService, TMDBMovie, TMDBTVShow, getImageUrl, getBackdropUrl } from '@shared/tmdb';
 import { cn } from '@/lib/utils';
 
