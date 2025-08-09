@@ -163,19 +163,18 @@ export default function Movies() {
           </div>
         </div>
 
-        {/* Load More Button */}
-        {currentPage < totalPages && (
-          <div className="text-center">
-            <Button 
-              onClick={loadMore}
-              variant="outline" 
-              size="lg" 
-              className="neu-button border-border/50"
-              disabled={loading}
-            >
-              {loading ? 'Loading...' : 'Load More Movies'}
-              <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
+        {/* Infinite Scroll Loading Indicator */}
+        {(isFetching || loadingMore) && currentPage < totalPages && (
+          <div className="text-center py-8">
+            <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
+            <p className="text-sm text-muted-foreground mt-2">Loading more movies...</p>
+          </div>
+        )}
+
+        {/* End of content indicator */}
+        {currentPage >= totalPages && movies.length > 0 && (
+          <div className="text-center py-8">
+            <p className="text-sm text-muted-foreground">You've reached the end of the list!</p>
           </div>
         )}
       </div>
