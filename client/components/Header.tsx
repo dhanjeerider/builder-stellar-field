@@ -181,6 +181,12 @@ export function Header() {
           </div>
         </div>
       )}
+
+      {/* Watchlist Modal */}
+      <WatchlistModal
+        isOpen={isWatchlistOpen}
+        onClose={() => setIsWatchlistOpen(false)}
+      />
     </>
   );
 }
