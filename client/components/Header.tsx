@@ -50,10 +50,10 @@ export function Header() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           {/* Left side - Menu and Logo */}
           <div className="flex items-center space-x-4">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="lg:hidden neu-button"
+            <Button
+              variant="ghost"
+              size="icon"
+              className="block xl:hidden neu-button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -70,7 +70,7 @@ export function Header() {
           </div>
 
           {/* Center - Navigation (Desktop) */}
-          <nav className="hidden lg:flex items-center space-x-1 bg-muted/30 rounded-xl p-1">
+          <nav className="hidden xl:flex items-center space-x-1 bg-muted/30 rounded-xl p-1">
             {navigationItems.map((item) => {
               const isActive = location.pathname === item.href;
               return (
@@ -131,7 +131,7 @@ export function Header() {
 
       {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div className="fixed inset-0 z-50 xl:hidden">
           <div
             className="fixed inset-0 bg-black/20 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
