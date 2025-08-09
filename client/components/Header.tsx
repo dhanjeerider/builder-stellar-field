@@ -142,7 +142,7 @@ export function Header() {
           <div className="fixed top-0 left-0 right-0 bg-background/98 backdrop-blur-md border-b border-border/50 pt-20 pb-6 px-4 neu-card">
             <nav className="space-y-3 max-w-sm mx-auto">
               {navigationItems.map((item) => {
-                const isActive = window.location.pathname === item.href;
+                const isActive = location.pathname === item.href;
                 return (
                   <Link
                     key={item.name}
@@ -159,6 +159,27 @@ export function Header() {
                   </Link>
                 );
               })}
+
+              {/* Additional Mobile Menu Items */}
+              <div className="border-t border-border/30 pt-3 mt-4">
+                <button
+                  onClick={() => {
+                    setIsWatchlistOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="block w-full px-6 py-4 rounded-xl text-base font-medium transition-all duration-200 text-center text-foreground hover:text-primary hover:bg-muted/50 neu-button"
+                >
+                  My Watchlist
+                </button>
+
+                <Link
+                  to="/faqs"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-6 py-4 rounded-xl text-base font-medium transition-all duration-200 text-center text-foreground hover:text-primary hover:bg-muted/50 neu-button"
+                >
+                  FAQs & Help
+                </Link>
+              </div>
             </nav>
           </div>
         </div>
