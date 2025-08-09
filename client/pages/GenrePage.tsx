@@ -1,8 +1,9 @@
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { ChevronLeft, Filter } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, Filter, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/components/MovieCard';
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { tmdbService, TMDBMovie, TMDBTVShow, TMDBGenre } from '@shared/tmdb';
 import { cn } from '@/lib/utils';
 
