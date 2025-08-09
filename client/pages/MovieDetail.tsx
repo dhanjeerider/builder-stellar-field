@@ -212,9 +212,23 @@ export default function MovieDetail() {
                   Play Now
                 </Button>
 
-                <Button variant="outline" size="lg" className="neu-button">
-                  <Plus className="w-5 h-5 mr-2" />
-                  Add to List
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="neu-button"
+                  onClick={toggleWatchlist}
+                >
+                  {inWatchlist ? (
+                    <>
+                      <Check className="w-5 h-5 mr-2" />
+                      In Watchlist
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-5 h-5 mr-2" />
+                      Add to Watchlist
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
