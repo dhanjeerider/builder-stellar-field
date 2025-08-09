@@ -4,6 +4,7 @@ import { Play, Plus, Star, Clock, Calendar, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MovieSlider } from '@/components/MovieSlider';
+import { VideoPlayerModal } from '@/components/VideoPlayerModal';
 import { tmdbService, TMDBMovie, TMDBTVShow, getImageUrl, getBackdropUrl, TMDBCast, TMDBVideo } from '@shared/tmdb';
 
 export default function MovieDetail() {
