@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import { ChevronRight, Filter } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { ChevronRight, Filter, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/components/MovieCard';
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { tmdbService, TMDBTVShow } from '@shared/tmdb';
 import { cn } from '@/lib/utils';
 
