@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Star, Play, Info, Calendar } from 'lucide-react';
+import { Star, Play, Info, Calendar, Plus, Check } from 'lucide-react';
 import { TMDBMovie, TMDBTVShow, getImageUrl } from '@shared/tmdb';
 import { VideoPlayerModal } from './VideoPlayerModal';
+import { addToWatchlist, isInWatchlist } from './WatchlistModal';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface MovieCardProps {
   movie: TMDBMovie | TMDBTVShow;
