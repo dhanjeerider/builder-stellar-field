@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Share2, Maximize2 } from 'lucide-react';
+import { X, Share2, Maximize2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -29,9 +29,9 @@ export function VideoPlayerModal({ isOpen, onClose, media, type }: VideoPlayerMo
     const server = SERVERS[serverIndex];
     const imdbId = generateIMDBId(media.id);
     let url = '';
-    
+
     if (isMovie) {
-      url = server.type === 'imdb' 
+      url = server.type === 'imdb'
         ? server.url.replace('{imdb_id}', imdbId)
         : server.url.replace('{tmdb_id}', media.id.toString());
     } else {
@@ -45,8 +45,21 @@ export function VideoPlayerModal({ isOpen, onClose, media, type }: VideoPlayerMo
             .replace('{season}', selectedSeason.toString())
             .replace('{episode}', selectedEpisode.toString());
     }
-    
+
     return url;
+  };
+
+  const generateDownloadUrl = () => {
+    if (isMovie) {
+      return `https://dl.vidsrc.vip/movie/${media.id}`;
+    } else {
+      return `https://dl.vidsrc.vip/tv/${media.id}/${selectedSeason}/${selectedEpisode}`;
+    }
+  };
+
+  const handleDownload = () => {
+    const downloadUrl = generateDownloadUrl();
+    window.open(downloadUrl, '_blank');
   };
 
   const title = isMovie ? (media as TMDBMovie).title : (media as TMDBTVShow).name;
@@ -102,6 +115,14 @@ export function VideoPlayerModal({ isOpen, onClose, media, type }: VideoPlayerMo
                 title="Share"
               >
                 <Share2 className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleDownload}
+                title="Download"
+              >
+                <Download className="h-4 w-4" />
               </Button>
             </div>
           </div>
