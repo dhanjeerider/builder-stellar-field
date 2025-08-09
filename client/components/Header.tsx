@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, Menu, Sun, Moon, X, Bookmark } from 'lucide-react';
 import { Button } from './ui/button';
 import { LiveSearch } from './LiveSearch';
+import { LanguageSelector } from './LanguageSelector';
 import { WatchlistModal } from './WatchlistModal';
 import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
