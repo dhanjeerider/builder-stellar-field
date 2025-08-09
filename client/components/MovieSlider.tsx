@@ -1,15 +1,16 @@
 import { useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Movie, TVShow } from '@shared/types';
+import { TMDBMovie, TMDBTVShow } from '@shared/tmdb';
 import { MovieCard } from './MovieCard';
 import { Button } from './ui/button';
 
 interface MovieSliderProps {
   title: string;
-  movies: (Movie | TVShow)[];
+  movies: (TMDBMovie | TMDBTVShow)[];
+  showHoverCard?: boolean;
 }
 
-export function MovieSlider({ title, movies }: MovieSliderProps) {
+export function MovieSlider({ title, movies, showHoverCard = false }: MovieSliderProps) {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -19,7 +20,7 @@ export function MovieSlider({ title, movies }: MovieSliderProps) {
     if (container) {
       setCanScrollLeft(container.scrollLeft > 0);
       setCanScrollRight(
-        container.scrollLeft < container.scrollWidth - container.clientWidth
+        container.scrollLeft < container.scrollWidth - container.clientWidth - 10
       );
     }
   };
@@ -36,45 +37,47 @@ export function MovieSlider({ title, movies }: MovieSliderProps) {
     }
   };
 
+  if (!movies || movies.length === 0) {
+    return null;
+  }
+
   return (
-    <section className="py-6">
+    <section className="py-8">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold mb-6">{title}</h2>
-        
-        <div className="relative group">
-          {/* Left arrow */}
-          {canScrollLeft && (
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold">{title}</h2>
+          <div className="flex space-x-2">
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background opacity-0 group-hover:opacity-100 transition-opacity"
+              className={`neu-button ${!canScrollLeft ? 'opacity-50' : ''}`}
               onClick={() => scroll('left')}
+              disabled={!canScrollLeft}
             >
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-4 w-4" />
             </Button>
-          )}
-          
-          {/* Right arrow */}
-          {canScrollRight && (
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background opacity-0 group-hover:opacity-100 transition-opacity"
+              className={`neu-button ${!canScrollRight ? 'opacity-50' : ''}`}
               onClick={() => scroll('right')}
+              disabled={!canScrollRight}
             >
-              <ChevronRight className="h-6 w-6" />
+              <ChevronRight className="h-4 w-4" />
             </Button>
-          )}
-          
-          {/* Movie grid */}
+          </div>
+        </div>
+        
+        <div className="relative">
+          {/* Movie slider */}
           <div
             ref={scrollContainerRef}
             className="flex space-x-4 overflow-x-auto scroll-smooth scrollbar-hide pb-4"
             onScroll={checkScrollButtons}
           >
             {movies.map((movie) => (
-              <div key={movie.id} className="flex-none w-40 sm:w-48">
-                <MovieCard movie={movie} />
+              <div key={movie.id} className="flex-none w-40 sm:w-48 lg:w-52">
+                <MovieCard movie={movie} showHoverCard={showHoverCard} />
               </div>
             ))}
           </div>
