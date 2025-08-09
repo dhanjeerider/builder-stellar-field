@@ -28,27 +28,33 @@ const App = () => (
     <ThemeProvider defaultTheme="light" storageKey="moviestream-theme">
       <LanguageProvider>
         <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/movie/:id" element={<MovieDetail />} />
-              <Route path="/tv/:id" element={<MovieDetail />} />
-              <Route path="/watch/:type/:id" element={<Watch />} />
-              <Route path="/movies" element={<Movies />} />
-              <Route path="/tv" element={<TVShows />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/genres" element={<Genres />} />
-              <Route path="/genre/:slug" element={<GenrePage />} />
-              <Route path="/settings" element={<PlaceholderPage title="Settings" />} />
-              <Route path="/faqs" element={<FAQ />} />
-              <Route path="/more" element={<PlaceholderPage title="More" />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Layout>
-        </BrowserRouter>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/movie/:id" element={<MovieDetail />} />
+                <Route path="/tv/:id" element={<MovieDetail />} />
+                <Route path="/watch/:type/:id" element={<Watch />} />
+                <Route path="/movies" element={<Movies />} />
+                <Route path="/tv" element={<TVShows />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/genres" element={<Genres />} />
+                <Route path="/genre/:slug" element={<GenrePage />} />
+                <Route
+                  path="/settings"
+                  element={<PlaceholderPage title="Settings" />}
+                />
+                <Route path="/faqs" element={<FAQ />} />
+                <Route
+                  path="/more"
+                  element={<PlaceholderPage title="More" />}
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Layout>
+          </BrowserRouter>
         </TooltipProvider>
       </LanguageProvider>
     </ThemeProvider>

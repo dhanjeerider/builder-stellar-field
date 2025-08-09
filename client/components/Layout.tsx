@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
-import { Header } from './Header';
-import { BottomNav } from './BottomNav';
+import { ReactNode } from "react";
+import { Header } from "./Header";
+import { BottomNav } from "./BottomNav";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,9 +10,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="pb-16">
-        {children}
-      </main>
+      <main className="pb-16">{children}</main>
       <BottomNav />
     </div>
   );

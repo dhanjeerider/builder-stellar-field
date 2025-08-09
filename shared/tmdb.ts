@@ -1,6 +1,6 @@
-const TMDB_API_KEY = '7bffed716d50c95ed1c4790cfab4866a';
-const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
+const TMDB_API_KEY = "7bffed716d50c95ed1c4790cfab4866a";
+const TMDB_BASE_URL = "https://api.themoviedb.org/3";
+const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
 export interface TMDBMovie {
   id: number;
@@ -107,8 +107,11 @@ export interface TMDBVideosResponse {
 }
 
 class TMDBService {
-  private async fetchFromTMDB<T>(endpoint: string, extraParams?: Record<string, string>): Promise<T> {
-    let url = `${TMDB_BASE_URL}${endpoint}${endpoint.includes('?') ? '&' : '?'}api_key=${TMDB_API_KEY}`;
+  private async fetchFromTMDB<T>(
+    endpoint: string,
+    extraParams?: Record<string, string>,
+  ): Promise<T> {
+    let url = `${TMDB_BASE_URL}${endpoint}${endpoint.includes("?") ? "&" : "?"}api_key=${TMDB_API_KEY}`;
 
     if (extraParams) {
       Object.entries(extraParams).forEach(([key, value]) => {
@@ -125,26 +128,41 @@ class TMDBService {
       }
       return await response.json();
     } catch (error) {
-      console.error('TMDB API Error:', error);
+      console.error("TMDB API Error:", error);
       throw error;
     }
   }
 
   // Movies
-  async getPopularMovies(page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBMovie>> {
+  async getPopularMovies(
+    page = 1,
+    languageParams?: Record<string, string>,
+  ): Promise<TMDBSearchResponse<TMDBMovie>> {
     return this.fetchFromTMDB(`/movie/popular?page=${page}`, languageParams);
   }
 
-  async getTopRatedMovies(page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBMovie>> {
+  async getTopRatedMovies(
+    page = 1,
+    languageParams?: Record<string, string>,
+  ): Promise<TMDBSearchResponse<TMDBMovie>> {
     return this.fetchFromTMDB(`/movie/top_rated?page=${page}`, languageParams);
   }
 
-  async getUpcomingMovies(page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBMovie>> {
+  async getUpcomingMovies(
+    page = 1,
+    languageParams?: Record<string, string>,
+  ): Promise<TMDBSearchResponse<TMDBMovie>> {
     return this.fetchFromTMDB(`/movie/upcoming?page=${page}`, languageParams);
   }
 
-  async getNowPlayingMovies(page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBMovie>> {
-    return this.fetchFromTMDB(`/movie/now_playing?page=${page}`, languageParams);
+  async getNowPlayingMovies(
+    page = 1,
+    languageParams?: Record<string, string>,
+  ): Promise<TMDBSearchResponse<TMDBMovie>> {
+    return this.fetchFromTMDB(
+      `/movie/now_playing?page=${page}`,
+      languageParams,
+    );
   }
 
   async getMovieDetails(movieId: number): Promise<TMDBMovie> {
@@ -159,16 +177,28 @@ class TMDBService {
     return this.fetchFromTMDB(`/movie/${movieId}/videos`);
   }
 
-  async getSimilarMovies(movieId: number): Promise<TMDBSearchResponse<TMDBMovie>> {
+  async getSimilarMovies(
+    movieId: number,
+  ): Promise<TMDBSearchResponse<TMDBMovie>> {
     return this.fetchFromTMDB(`/movie/${movieId}/similar`);
   }
 
-  async getMoviesByGenre(genreId: number, page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBMovie>> {
-    return this.fetchFromTMDB(`/discover/movie?with_genres=${genreId}&page=${page}&sort_by=popularity.desc`, languageParams);
+  async getMoviesByGenre(
+    genreId: number,
+    page = 1,
+    languageParams?: Record<string, string>,
+  ): Promise<TMDBSearchResponse<TMDBMovie>> {
+    return this.fetchFromTMDB(
+      `/discover/movie?with_genres=${genreId}&page=${page}&sort_by=popularity.desc`,
+      languageParams,
+    );
   }
 
   // TV Shows
-  async getPopularTVShows(page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBTVShow>> {
+  async getPopularTVShows(
+    page = 1,
+    languageParams?: Record<string, string>,
+  ): Promise<TMDBSearchResponse<TMDBTVShow>> {
     return this.fetchFromTMDB(`/tv/popular?page=${page}`, languageParams);
   }
 
@@ -176,7 +206,9 @@ class TMDBService {
     return this.fetchFromTMDB(`/tv/top_rated?page=${page}`);
   }
 
-  async getAiringTodayTVShows(page = 1): Promise<TMDBSearchResponse<TMDBTVShow>> {
+  async getAiringTodayTVShows(
+    page = 1,
+  ): Promise<TMDBSearchResponse<TMDBTVShow>> {
     return this.fetchFromTMDB(`/tv/airing_today?page=${page}`);
   }
 
@@ -196,62 +228,101 @@ class TMDBService {
     return this.fetchFromTMDB(`/tv/${tvId}/videos`);
   }
 
-  async getSimilarTVShows(tvId: number): Promise<TMDBSearchResponse<TMDBTVShow>> {
+  async getSimilarTVShows(
+    tvId: number,
+  ): Promise<TMDBSearchResponse<TMDBTVShow>> {
     return this.fetchFromTMDB(`/tv/${tvId}/similar`);
   }
 
-  async getTVShowsByGenre(genreId: number, page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBTVShow>> {
-    return this.fetchFromTMDB(`/discover/tv?with_genres=${genreId}&page=${page}&sort_by=popularity.desc`, languageParams);
+  async getTVShowsByGenre(
+    genreId: number,
+    page = 1,
+    languageParams?: Record<string, string>,
+  ): Promise<TMDBSearchResponse<TMDBTVShow>> {
+    return this.fetchFromTMDB(
+      `/discover/tv?with_genres=${genreId}&page=${page}&sort_by=popularity.desc`,
+      languageParams,
+    );
   }
 
-  async getTVSeasonDetails(tvId: number, seasonNumber: number): Promise<TMDBSeason> {
+  async getTVSeasonDetails(
+    tvId: number,
+    seasonNumber: number,
+  ): Promise<TMDBSeason> {
     return this.fetchFromTMDB(`/tv/${tvId}/season/${seasonNumber}`);
   }
 
   // Genres
   async getMovieGenres(): Promise<{ genres: TMDBGenre[] }> {
-    return this.fetchFromTMDB('/genre/movie/list');
+    return this.fetchFromTMDB("/genre/movie/list");
   }
 
   async getTVGenres(): Promise<{ genres: TMDBGenre[] }> {
-    return this.fetchFromTMDB('/genre/tv/list');
+    return this.fetchFromTMDB("/genre/tv/list");
   }
 
   // Search
-  async searchMovies(query: string, page = 1): Promise<TMDBSearchResponse<TMDBMovie>> {
-    return this.fetchFromTMDB(`/search/movie?query=${encodeURIComponent(query)}&page=${page}`);
+  async searchMovies(
+    query: string,
+    page = 1,
+  ): Promise<TMDBSearchResponse<TMDBMovie>> {
+    return this.fetchFromTMDB(
+      `/search/movie?query=${encodeURIComponent(query)}&page=${page}`,
+    );
   }
 
-  async searchTVShows(query: string, page = 1): Promise<TMDBSearchResponse<TMDBTVShow>> {
-    return this.fetchFromTMDB(`/search/tv?query=${encodeURIComponent(query)}&page=${page}`);
+  async searchTVShows(
+    query: string,
+    page = 1,
+  ): Promise<TMDBSearchResponse<TMDBTVShow>> {
+    return this.fetchFromTMDB(
+      `/search/tv?query=${encodeURIComponent(query)}&page=${page}`,
+    );
   }
 
-  async searchMulti(query: string, page = 1): Promise<TMDBSearchResponse<TMDBMovie | TMDBTVShow>> {
-    return this.fetchFromTMDB(`/search/multi?query=${encodeURIComponent(query)}&page=${page}`);
+  async searchMulti(
+    query: string,
+    page = 1,
+  ): Promise<TMDBSearchResponse<TMDBMovie | TMDBTVShow>> {
+    return this.fetchFromTMDB(
+      `/search/multi?query=${encodeURIComponent(query)}&page=${page}`,
+    );
   }
 
   // Trending
-  async getTrendingMovies(timeWindow: 'day' | 'week' = 'week'): Promise<TMDBSearchResponse<TMDBMovie>> {
+  async getTrendingMovies(
+    timeWindow: "day" | "week" = "week",
+  ): Promise<TMDBSearchResponse<TMDBMovie>> {
     return this.fetchFromTMDB(`/trending/movie/${timeWindow}`);
   }
 
-  async getTrendingTVShows(timeWindow: 'day' | 'week' = 'week'): Promise<TMDBSearchResponse<TMDBTVShow>> {
+  async getTrendingTVShows(
+    timeWindow: "day" | "week" = "week",
+  ): Promise<TMDBSearchResponse<TMDBTVShow>> {
     return this.fetchFromTMDB(`/trending/tv/${timeWindow}`);
   }
 
-  async getTrendingAll(timeWindow: 'day' | 'week' = 'week'): Promise<TMDBSearchResponse<TMDBMovie | TMDBTVShow>> {
+  async getTrendingAll(
+    timeWindow: "day" | "week" = "week",
+  ): Promise<TMDBSearchResponse<TMDBMovie | TMDBTVShow>> {
     return this.fetchFromTMDB(`/trending/all/${timeWindow}`);
   }
 }
 
 // Image URL helpers
-export const getImageUrl = (path: string | null, size: 'w154' | 'w185' | 'w342' | 'w500' | 'w780' | 'original' = 'w500'): string => {
-  if (!path) return '/placeholder.svg';
+export const getImageUrl = (
+  path: string | null,
+  size: "w154" | "w185" | "w342" | "w500" | "w780" | "original" = "w500",
+): string => {
+  if (!path) return "/placeholder.svg";
   return `${TMDB_IMAGE_BASE_URL}/${size}${path}`;
 };
 
-export const getBackdropUrl = (path: string | null, size: 'w300' | 'w780' | 'w1280' | 'original' = 'w1280'): string => {
-  if (!path) return '/placeholder.svg';
+export const getBackdropUrl = (
+  path: string | null,
+  size: "w300" | "w780" | "w1280" | "original" = "w1280",
+): string => {
+  if (!path) return "/placeholder.svg";
   return `${TMDB_IMAGE_BASE_URL}/${size}${path}`;
 };
 
@@ -260,7 +331,7 @@ export const convertTMDBMovieToAppFormat = (tmdbMovie: TMDBMovie): any => {
   return {
     id: tmdbMovie.id.toString(),
     tmdb_id: tmdbMovie.id.toString(),
-    imdb_id: '', // Will need to fetch separately if needed
+    imdb_id: "", // Will need to fetch separately if needed
     title: tmdbMovie.title,
     year: new Date(tmdbMovie.release_date).getFullYear(),
     rating: tmdbMovie.vote_average,
@@ -268,11 +339,11 @@ export const convertTMDBMovieToAppFormat = (tmdbMovie: TMDBMovie): any => {
     backdrop: getBackdropUrl(tmdbMovie.backdrop_path),
     synopsis: tmdbMovie.overview,
     runtime: tmdbMovie.runtime || 0,
-    genres: tmdbMovie.genres?.map(g => g.name) || [],
+    genres: tmdbMovie.genres?.map((g) => g.name) || [],
     cast: [],
     trailers: [],
-    type: 'movie' as const,
-    quality: 'HD' as const,
+    type: "movie" as const,
+    quality: "HD" as const,
   };
 };
 
@@ -280,19 +351,19 @@ export const convertTMDBTVShowToAppFormat = (tmdbShow: TMDBTVShow): any => {
   return {
     id: tmdbShow.id.toString(),
     tmdb_id: tmdbShow.id.toString(),
-    imdb_id: '', // Will need to fetch separately if needed
+    imdb_id: "", // Will need to fetch separately if needed
     title: tmdbShow.name,
     year: new Date(tmdbShow.first_air_date).getFullYear(),
     rating: tmdbShow.vote_average,
     poster: getImageUrl(tmdbShow.poster_path),
     backdrop: getBackdropUrl(tmdbShow.backdrop_path),
     synopsis: tmdbShow.overview,
-    genres: tmdbShow.genres?.map(g => g.name) || [],
+    genres: tmdbShow.genres?.map((g) => g.name) || [],
     cast: [],
     trailers: [],
     seasons: tmdbShow.seasons || [],
-    type: 'tv' as const,
-    quality: 'HD' as const,
+    type: "tv" as const,
+    quality: "HD" as const,
   };
 };
 

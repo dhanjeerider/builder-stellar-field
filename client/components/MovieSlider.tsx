@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react';
-import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { TMDBMovie, TMDBTVShow } from '@shared/tmdb';
-import { MovieCard } from './MovieCard';
-import { Button } from './ui/button';
+import { useState, useRef } from "react";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { TMDBMovie, TMDBTVShow } from "@shared/tmdb";
+import { MovieCard } from "./MovieCard";
+import { Button } from "./ui/button";
 
 interface MovieSliderProps {
   title: string;
@@ -18,7 +18,7 @@ export function MovieSlider({
   movies,
   showHoverCard = false,
   viewAllLink,
-  viewAllText = "View All"
+  viewAllText = "View All",
 }: MovieSliderProps) {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -29,18 +29,19 @@ export function MovieSlider({
     if (container) {
       setCanScrollLeft(container.scrollLeft > 0);
       setCanScrollRight(
-        container.scrollLeft < container.scrollWidth - container.clientWidth - 10
+        container.scrollLeft <
+          container.scrollWidth - container.clientWidth - 10,
       );
     }
   };
 
-  const scroll = (direction: 'left' | 'right') => {
+  const scroll = (direction: "left" | "right") => {
     const container = scrollContainerRef.current;
     if (container) {
       const scrollAmount = container.clientWidth * 0.8;
       container.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth',
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
       });
       setTimeout(checkScrollButtons, 100);
     }
@@ -57,7 +58,12 @@ export function MovieSlider({
           <h2 className="text-2xl font-bold">{title}</h2>
           <div className="flex items-center space-x-2">
             {viewAllLink && (
-              <Button variant="outline" size="sm" className="neu-button" asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="neu-button"
+                asChild
+              >
                 <Link to={viewAllLink} className="flex items-center space-x-1">
                   <span>{viewAllText}</span>
                   <ArrowRight className="h-4 w-4" />
@@ -67,8 +73,8 @@ export function MovieSlider({
             <Button
               variant="outline"
               size="icon"
-              className={`neu-button ${!canScrollLeft ? 'opacity-50' : ''}`}
-              onClick={() => scroll('left')}
+              className={`neu-button ${!canScrollLeft ? "opacity-50" : ""}`}
+              onClick={() => scroll("left")}
               disabled={!canScrollLeft}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -76,15 +82,15 @@ export function MovieSlider({
             <Button
               variant="outline"
               size="icon"
-              className={`neu-button ${!canScrollRight ? 'opacity-50' : ''}`}
-              onClick={() => scroll('right')}
+              className={`neu-button ${!canScrollRight ? "opacity-50" : ""}`}
+              onClick={() => scroll("right")}
               disabled={!canScrollRight}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </div>
-        
+
         <div className="relative">
           {/* Movie slider */}
           <div

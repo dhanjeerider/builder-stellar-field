@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 interface UseInfiniteScrollOptions {
   hasNextPage: boolean;
@@ -9,12 +9,15 @@ interface UseInfiniteScrollOptions {
 export function useInfiniteScroll({
   hasNextPage,
   fetchNextPage,
-  threshold = 100
+  threshold = 100,
 }: UseInfiniteScrollOptions) {
   const [isFetching, setIsFetching] = useState(false);
 
   const handleScroll = useCallback(() => {
-    if (window.innerHeight + document.documentElement.scrollTop + threshold >= document.documentElement.offsetHeight) {
+    if (
+      window.innerHeight + document.documentElement.scrollTop + threshold >=
+      document.documentElement.offsetHeight
+    ) {
       if (hasNextPage && !isFetching) {
         setIsFetching(true);
       }
@@ -22,8 +25,8 @@ export function useInfiniteScroll({
   }, [hasNextPage, isFetching, threshold]);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
   useEffect(() => {

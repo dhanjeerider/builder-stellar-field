@@ -116,7 +116,7 @@
   /* Neuomorphism components */
   .neu-card {
     background: hsl(var(--background));
-    box-shadow: 
+    box-shadow:
       8px 8px 16px hsl(var(--neumorphism-dark)),
       -8px -8px 16px hsl(var(--neumorphism-light));
     border-radius: var(--radius);
@@ -124,7 +124,7 @@
 
   .neu-card-inset {
     background: hsl(var(--background));
-    box-shadow: 
+    box-shadow:
       inset 4px 4px 8px hsl(var(--neumorphism-inset-dark)),
       inset -4px -4px 8px hsl(var(--neumorphism-inset-light));
     border-radius: var(--radius);
@@ -132,7 +132,7 @@
 
   .neu-button {
     background: hsl(var(--background));
-    box-shadow: 
+    box-shadow:
       4px 4px 8px hsl(var(--neumorphism-dark)),
       -4px -4px 8px hsl(var(--neumorphism-light));
     border-radius: var(--radius);
@@ -140,20 +140,20 @@
   }
 
   .neu-button:hover {
-    box-shadow: 
+    box-shadow:
       2px 2px 4px hsl(var(--neumorphism-dark)),
       -2px -2px 4px hsl(var(--neumorphism-light));
   }
 
   .neu-button:active {
-    box-shadow: 
+    box-shadow:
       inset 2px 2px 4px hsl(var(--neumorphism-inset-dark)),
       inset -2px -2px 4px hsl(var(--neumorphism-inset-light));
   }
 
   .neu-header {
     background: hsl(var(--background));
-    box-shadow: 
+    box-shadow:
       0 4px 12px hsl(var(--neumorphism-dark) / 0.3),
       0 -1px 0 hsl(var(--neumorphism-light));
     backdrop-filter: blur(10px);
@@ -178,14 +178,14 @@
 
   .genre-card {
     @apply bg-card hover:bg-primary/5 transition-all duration-300 rounded-xl overflow-hidden border border-border/50;
-    box-shadow: 
+    box-shadow:
       4px 4px 12px hsl(var(--neumorphism-dark) / 0.1),
       -2px -2px 8px hsl(var(--neumorphism-light) / 0.5);
   }
 
   .genre-card:hover {
     transform: translateY(-2px);
-    box-shadow: 
+    box-shadow:
       6px 6px 18px hsl(var(--neumorphism-dark) / 0.2),
       -3px -3px 10px hsl(var(--neumorphism-light) / 0.7);
     border-color: hsl(var(--primary) / 0.3);
@@ -230,7 +230,7 @@
 
   .tab-nav button[data-active="true"] {
     @apply bg-background text-foreground;
-    box-shadow: 
+    box-shadow:
       2px 2px 6px hsl(var(--neumorphism-dark) / 0.2),
       -1px -1px 3px hsl(var(--neumorphism-light));
   }

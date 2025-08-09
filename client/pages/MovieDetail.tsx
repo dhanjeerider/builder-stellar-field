@@ -1,19 +1,41 @@
-import { useParams, Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { Play, Plus, Check, Star, Clock, Calendar, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { MovieSlider } from '@/components/MovieSlider';
-import { VideoPlayerModal } from '@/components/VideoPlayerModal';
-import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '@/components/WatchlistModal';
-import { tmdbService, TMDBMovie, TMDBTVShow, getImageUrl, getBackdropUrl, TMDBCast, TMDBVideo } from '@shared/tmdb';
+import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import {
+  Play,
+  Plus,
+  Check,
+  Star,
+  Clock,
+  Calendar,
+  ArrowLeft,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { MovieSlider } from "@/components/MovieSlider";
+import { VideoPlayerModal } from "@/components/VideoPlayerModal";
+import {
+  addToWatchlist,
+  removeFromWatchlist,
+  isInWatchlist,
+} from "@/components/WatchlistModal";
+import {
+  tmdbService,
+  TMDBMovie,
+  TMDBTVShow,
+  getImageUrl,
+  getBackdropUrl,
+  TMDBCast,
+  TMDBVideo,
+} from "@shared/tmdb";
 
 export default function MovieDetail() {
   const { id } = useParams<{ id: string }>();
   const [media, setMedia] = useState<TMDBMovie | TMDBTVShow | null>(null);
   const [cast, setCast] = useState<TMDBCast[]>([]);
   const [videos, setVideos] = useState<TMDBVideo[]>([]);
-  const [similarContent, setSimilarContent] = useState<(TMDBMovie | TMDBTVShow)[]>([]);
+  const [similarContent, setSimilarContent] = useState<
+    (TMDBMovie | TMDBTVShow)[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
@@ -22,27 +44,31 @@ export default function MovieDetail() {
   useEffect(() => {
     const fetchMediaDetails = async () => {
       if (!id) return;
-      
+
       try {
         setLoading(true);
         setError(null);
-        
+
         const mediaId = parseInt(id);
         const path = window.location.pathname;
-        const isMovie = path.includes('/movie/');
-        
+        const isMovie = path.includes("/movie/");
+
         if (isMovie) {
           // Fetch movie details
-          const [movieDetails, credits, videosRes, similar] = await Promise.all([
-            tmdbService.getMovieDetails(mediaId),
-            tmdbService.getMovieCredits(mediaId),
-            tmdbService.getMovieVideos(mediaId),
-            tmdbService.getSimilarMovies(mediaId),
-          ]);
-          
+          const [movieDetails, credits, videosRes, similar] = await Promise.all(
+            [
+              tmdbService.getMovieDetails(mediaId),
+              tmdbService.getMovieCredits(mediaId),
+              tmdbService.getMovieVideos(mediaId),
+              tmdbService.getSimilarMovies(mediaId),
+            ],
+          );
+
           setMedia(movieDetails);
           setCast(credits.cast.slice(0, 12));
-          setVideos(videosRes.results.filter(v => v.type === 'Trailer').slice(0, 3));
+          setVideos(
+            videosRes.results.filter((v) => v.type === "Trailer").slice(0, 3),
+          );
           setSimilarContent(similar.results.slice(0, 20));
         } else {
           // Fetch TV show details
@@ -52,19 +78,21 @@ export default function MovieDetail() {
             tmdbService.getTVShowVideos(mediaId),
             tmdbService.getSimilarTVShows(mediaId),
           ]);
-          
+
           setMedia(tvDetails);
           setCast(credits.cast.slice(0, 12));
-          setVideos(videosRes.results.filter(v => v.type === 'Trailer').slice(0, 3));
+          setVideos(
+            videosRes.results.filter((v) => v.type === "Trailer").slice(0, 3),
+          );
           setSimilarContent(similar.results.slice(0, 20));
         }
 
         // Check watchlist status
-        const mediaType = path.includes('/movie/') ? 'movie' : 'tv';
+        const mediaType = path.includes("/movie/") ? "movie" : "tv";
         setInWatchlist(isInWatchlist(mediaId, mediaType));
       } catch (error) {
-        console.error('Error fetching media details:', error);
-        setError('Failed to load content details');
+        console.error("Error fetching media details:", error);
+        setError("Failed to load content details");
       } finally {
         setLoading(false);
       }
@@ -116,15 +144,15 @@ export default function MovieDetail() {
     );
   }
 
-  const isMovie = 'title' in media;
+  const isMovie = "title" in media;
   const title = isMovie ? media.title : media.name;
   const releaseDate = isMovie ? media.release_date : media.first_air_date;
-  const year = releaseDate ? new Date(releaseDate).getFullYear() : '';
+  const year = releaseDate ? new Date(releaseDate).getFullYear() : "";
   const overview = media.overview;
   const runtime = isMovie ? (media as TMDBMovie).runtime : undefined;
 
   const toggleWatchlist = () => {
-    const mediaType = isMovie ? 'movie' : 'tv';
+    const mediaType = isMovie ? "movie" : "tv";
 
     if (inWatchlist) {
       removeFromWatchlist(media.id, mediaType);
@@ -139,67 +167,78 @@ export default function MovieDetail() {
     <div className="min-h-screen">
       {/* Hero Section with Backdrop */}
       <section className="relative h-[70vh] overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${getBackdropUrl(media.backdrop_path, 'original')})` }}
+          style={{
+            backgroundImage: `url(${getBackdropUrl(media.backdrop_path, "original")})`,
+          }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-transparent to-transparent" />
         </div>
-        
+
         <div className="relative container mx-auto px-4 h-full flex items-end pb-8">
           <div className="flex flex-col md:flex-row gap-6 w-full">
             {/* Poster */}
             <div className="flex-shrink-0 mx-auto md:mx-0">
               <img
-                src={getImageUrl(media.poster_path, 'w500')}
+                src={getImageUrl(media.poster_path, "w500")}
                 alt={title}
                 className="w-48 md:w-64 aspect-[2/3] object-cover rounded-xl shadow-2xl mx-auto md:mx-0"
               />
             </div>
-            
+
             {/* Info */}
             <div className="flex-1 space-y-4 text-center md:text-left">
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight">{title}</h1>
-              
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+                {title}
+              </h1>
+
               <div className="flex flex-wrap items-center gap-4 text-sm">
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 rating-star fill-current" />
-                  <span className="font-semibold">{media.vote_average.toFixed(1)}</span>
+                  <span className="font-semibold">
+                    {media.vote_average.toFixed(1)}
+                  </span>
                 </div>
-                
+
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
                   <span>{year}</span>
                 </div>
-                
+
                 {runtime && (
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
-                    <span>{Math.floor(runtime / 60)}h {runtime % 60}m</span>
+                    <span>
+                      {Math.floor(runtime / 60)}h {runtime % 60}m
+                    </span>
                   </div>
                 )}
-                
+
                 <Badge variant="secondary" className="quality-badge">
                   HD
                 </Badge>
               </div>
-              
+
               {/* Genres */}
               <div className="flex flex-wrap gap-2">
                 {media.genres?.map((genre) => (
                   <Link key={genre.id} to={`/genre/${genre.id}`}>
-                    <Badge variant="outline" className="genre-tag hover:bg-accent">
+                    <Badge
+                      variant="outline"
+                      className="genre-tag hover:bg-accent"
+                    >
                       {genre.name}
                     </Badge>
                   </Link>
                 ))}
               </div>
-              
+
               <p className="text-lg text-muted-foreground leading-relaxed line-clamp-3 max-w-3xl">
                 {overview}
               </p>
-              
+
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                 <Button
@@ -251,7 +290,10 @@ export default function MovieDetail() {
             <h2 className="text-2xl font-bold mb-6">Trailers</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {videos.map((video) => (
-                <div key={video.id} className="aspect-video bg-muted rounded-xl overflow-hidden neu-card">
+                <div
+                  key={video.id}
+                  className="aspect-video bg-muted rounded-xl overflow-hidden neu-card"
+                >
                   <iframe
                     src={`https://www.youtube.com/embed/${video.key}`}
                     title={video.name}
@@ -274,16 +316,20 @@ export default function MovieDetail() {
                 <div key={actor.id} className="text-center group">
                   <div className="movie-card p-3">
                     <img
-                      src={getImageUrl(actor.profile_path, 'w185')}
+                      src={getImageUrl(actor.profile_path, "w185")}
                       alt={actor.name}
                       className="w-full aspect-[2/3] object-cover rounded-lg bg-muted mb-3"
                       onError={(e) => {
                         const img = e.target as HTMLImageElement;
-                        img.src = '/placeholder.svg';
+                        img.src = "/placeholder.svg";
                       }}
                     />
-                    <h3 className="font-semibold text-sm line-clamp-1">{actor.name}</h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{actor.character}</p>
+                    <h3 className="font-semibold text-sm line-clamp-1">
+                      {actor.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {actor.character}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -294,8 +340,8 @@ export default function MovieDetail() {
         {/* Similar Content */}
         {similarContent.length > 0 && (
           <section>
-            <MovieSlider 
-              title={`More like ${title}`} 
+            <MovieSlider
+              title={`More like ${title}`}
               movies={similarContent}
               showHoverCard={true}
             />
@@ -309,7 +355,7 @@ export default function MovieDetail() {
           isOpen={isPlayerOpen}
           onClose={() => setIsPlayerOpen(false)}
           media={media}
-          type={isMovie ? 'movie' : 'tv'}
+          type={isMovie ? "movie" : "tv"}
         />
       )}
     </div>

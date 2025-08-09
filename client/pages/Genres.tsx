@@ -1,20 +1,22 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ChevronRight, Film, Tv } from 'lucide-react';
-import { tmdbService, TMDBGenre, TMDBMovie, getImageUrl } from '@shared/tmdb';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ChevronRight, Film, Tv } from "lucide-react";
+import { tmdbService, TMDBGenre, TMDBMovie, getImageUrl } from "@shared/tmdb";
+import { cn } from "@/lib/utils";
 
 export default function Genres() {
   const [movieGenres, setMovieGenres] = useState<TMDBGenre[]>([]);
   const [tvGenres, setTVGenres] = useState<TMDBGenre[]>([]);
-  const [genreMovies, setGenreMovies] = useState<{ [key: number]: TMDBMovie[] }>({});
+  const [genreMovies, setGenreMovies] = useState<{
+    [key: number]: TMDBMovie[];
+  }>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchGenres = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch genres
         const [movieGenresRes, tvGenresRes] = await Promise.all([
           tmdbService.getMovieGenres(),
@@ -31,14 +33,17 @@ export default function Genres() {
             const moviesRes = await tmdbService.getMoviesByGenre(genre.id);
             sampleMovies[genre.id] = moviesRes.results.slice(0, 3);
           } catch (error) {
-            console.error(`Error fetching movies for genre ${genre.name}:`, error);
+            console.error(
+              `Error fetching movies for genre ${genre.name}:`,
+              error,
+            );
             sampleMovies[genre.id] = [];
           }
         }
-        
+
         setGenreMovies(sampleMovies);
       } catch (error) {
-        console.error('Error fetching genres:', error);
+        console.error("Error fetching genres:", error);
       } finally {
         setLoading(false);
       }
@@ -57,7 +62,10 @@ export default function Genres() {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-12">
           {Array.from({ length: 18 }).map((_, index) => (
-            <div key={index} className="p-6 bg-muted animate-pulse rounded-xl h-24" />
+            <div
+              key={index}
+              className="p-6 bg-muted animate-pulse rounded-xl h-24"
+            />
           ))}
         </div>
       </div>
@@ -66,15 +74,17 @@ export default function Genres() {
 
   // Combine and deduplicate genres
   const allGenres = [...movieGenres];
-  const uniqueGenres = allGenres.filter((genre, index, arr) => 
-    arr.findIndex(g => g.id === genre.id) === index
+  const uniqueGenres = allGenres.filter(
+    (genre, index, arr) => arr.findIndex((g) => g.id === genre.id) === index,
   );
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Browse by Genre</h1>
-        <p className="text-muted-foreground">Discover movies and TV shows by your favorite genres</p>
+        <p className="text-muted-foreground">
+          Discover movies and TV shows by your favorite genres
+        </p>
       </div>
 
       {/* All Genres Grid */}
@@ -83,7 +93,7 @@ export default function Genres() {
           <span>All Genres</span>
           <ChevronRight className="w-5 h-5 text-muted-foreground" />
         </h2>
-        
+
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {uniqueGenres.map((genre) => (
             <Link
@@ -110,11 +120,11 @@ export default function Genres() {
           <span>Popular Genres</span>
           <ChevronRight className="w-5 h-5 text-muted-foreground" />
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {movieGenres.slice(0, 6).map((genre) => {
             const movies = genreMovies[genre.id] || [];
-            
+
             return (
               <Link
                 key={genre.id}
@@ -131,30 +141,35 @@ export default function Genres() {
                         {genre.name}
                       </h3>
                       <p className="text-sm text-muted-foreground">
-                        {movies.length > 0 ? `${movies.length}+ movies` : 'Browse movies'}
+                        {movies.length > 0
+                          ? `${movies.length}+ movies`
+                          : "Browse movies"}
                       </p>
                     </div>
                   </div>
                   <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                 </div>
-                
+
                 <div className="flex space-x-2">
                   {movies.slice(0, 3).map((movie) => (
                     <div key={movie.id} className="flex-1">
                       <img
-                        src={getImageUrl(movie.poster_path, 'w185')}
+                        src={getImageUrl(movie.poster_path, "w185")}
                         alt={movie.title}
                         className="w-full aspect-[2/3] object-cover rounded-lg bg-muted group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                   ))}
-                  {movies.length < 3 && Array.from({ length: 3 - movies.length }).map((_, index) => (
-                    <div key={`placeholder-${index}`} className="flex-1">
-                      <div className="w-full aspect-[2/3] bg-muted rounded-lg flex items-center justify-center">
-                        <Film className="w-8 h-8 text-muted-foreground" />
-                      </div>
-                    </div>
-                  ))}
+                  {movies.length < 3 &&
+                    Array.from({ length: 3 - movies.length }).map(
+                      (_, index) => (
+                        <div key={`placeholder-${index}`} className="flex-1">
+                          <div className="w-full aspect-[2/3] bg-muted rounded-lg flex items-center justify-center">
+                            <Film className="w-8 h-8 text-muted-foreground" />
+                          </div>
+                        </div>
+                      ),
+                    )}
                 </div>
               </Link>
             );
@@ -169,7 +184,7 @@ export default function Genres() {
           <span>TV Show Genres</span>
           <ChevronRight className="w-5 h-5 text-muted-foreground" />
         </h2>
-        
+
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {tvGenres.slice(0, 12).map((genre) => (
             <Link

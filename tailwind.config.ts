@@ -89,38 +89,38 @@ export default {
   },
   plugins: [
     require("tailwindcss-animate"),
-    function({ addUtilities }: any) {
+    function ({ addUtilities }: any) {
       const newUtilities = {
-        '.scrollbar-hide': {
+        ".scrollbar-hide": {
           /* IE and Edge */
-          '-ms-overflow-style': 'none',
+          "-ms-overflow-style": "none",
           /* Firefox */
-          'scrollbar-width': 'none',
+          "scrollbar-width": "none",
           /* Safari and Chrome */
-          '&::-webkit-scrollbar': {
-            display: 'none'
-          }
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
         },
-        '.line-clamp-1': {
-          overflow: 'hidden',
-          display: '-webkit-box',
-          '-webkit-box-orient': 'vertical',
-          '-webkit-line-clamp': '1',
+        ".line-clamp-1": {
+          overflow: "hidden",
+          display: "-webkit-box",
+          "-webkit-box-orient": "vertical",
+          "-webkit-line-clamp": "1",
         },
-        '.line-clamp-2': {
-          overflow: 'hidden',
-          display: '-webkit-box',
-          '-webkit-box-orient': 'vertical',
-          '-webkit-line-clamp': '2',
+        ".line-clamp-2": {
+          overflow: "hidden",
+          display: "-webkit-box",
+          "-webkit-box-orient": "vertical",
+          "-webkit-line-clamp": "2",
         },
-        '.line-clamp-3': {
-          overflow: 'hidden',
-          display: '-webkit-box',
-          '-webkit-box-orient': 'vertical',
-          '-webkit-line-clamp': '3',
-        }
-      }
-      addUtilities(newUtilities)
-    }
+        ".line-clamp-3": {
+          overflow: "hidden",
+          display: "-webkit-box",
+          "-webkit-box-orient": "vertical",
+          "-webkit-line-clamp": "3",
+        },
+      };
+      addUtilities(newUtilities);
+    },
   ],
 } satisfies Config;

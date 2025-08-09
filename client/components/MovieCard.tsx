@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom';
-import { Star, Play, Info, Calendar, Plus, Check } from 'lucide-react';
-import { TMDBMovie, TMDBTVShow, getImageUrl } from '@shared/tmdb';
-import { VideoPlayerModal } from './VideoPlayerModal';
-import { addToWatchlist, isInWatchlist } from './WatchlistModal';
-import { cn } from '@/lib/utils';
-import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
+import { Star, Play, Info, Calendar, Plus, Check } from "lucide-react";
+import { TMDBMovie, TMDBTVShow, getImageUrl } from "@shared/tmdb";
+import { VideoPlayerModal } from "./VideoPlayerModal";
+import { addToWatchlist, isInWatchlist } from "./WatchlistModal";
+import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
 
 interface MovieCardProps {
   movie: TMDBMovie | TMDBTVShow;
@@ -12,18 +12,22 @@ interface MovieCardProps {
   showHoverCard?: boolean;
 }
 
-export function MovieCard({ movie, className, showHoverCard = false }: MovieCardProps) {
+export function MovieCard({
+  movie,
+  className,
+  showHoverCard = false,
+}: MovieCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
   const [inWatchlist, setInWatchlist] = useState(false);
-  const isMovie = 'title' in movie;
+  const isMovie = "title" in movie;
   const title = isMovie ? movie.title : movie.name;
   const releaseDate = isMovie ? movie.release_date : movie.first_air_date;
-  const year = releaseDate ? new Date(releaseDate).getFullYear() : '';
+  const year = releaseDate ? new Date(releaseDate).getFullYear() : "";
   const linkTo = isMovie ? `/movie/${movie.id}` : `/tv/${movie.id}`;
 
   useEffect(() => {
-    const mediaType = isMovie ? 'movie' : 'tv';
+    const mediaType = isMovie ? "movie" : "tv";
     setInWatchlist(isInWatchlist(movie.id, mediaType));
   }, [movie.id, isMovie]);
 
@@ -36,7 +40,7 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
   const handleWatchlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const mediaType = isMovie ? 'movie' : 'tv';
+    const mediaType = isMovie ? "movie" : "tv";
 
     if (inWatchlist) {
       // Would need removeFromWatchlist but let's just add for now
@@ -48,7 +52,7 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
   };
 
   return (
-    <div 
+    <div
       className={cn("group relative", className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -57,17 +61,17 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
         <div className="movie-card p-3 h-full relative overflow-hidden">
           <div className="relative mb-3">
             <img
-              src={getImageUrl(movie.poster_path, 'w342')}
+              src={getImageUrl(movie.poster_path, "w342")}
               alt={title}
               className="w-full aspect-[2/3] object-cover rounded-xl bg-muted transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
             />
-            
+
             {/* Quality badge */}
             <div className="absolute top-2 right-2">
               <span className="quality-badge">HD</span>
             </div>
-            
+
             {/* Play overlay on hover */}
             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl flex items-center justify-center">
               <button
@@ -81,21 +85,23 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
             {/* Rating badge */}
             <div className="absolute bottom-2 left-2 bg-black/80 rounded-lg px-2 py-1 flex items-center space-x-1">
               <Star className="w-3 h-3 rating-star fill-current" />
-              <span className="text-white text-xs font-medium">{movie.vote_average.toFixed(1)}</span>
+              <span className="text-white text-xs font-medium">
+                {movie.vote_average.toFixed(1)}
+              </span>
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <h3 className="font-semibold text-sm leading-tight line-clamp-2 group-hover:text-primary transition-colors">
               {title}
             </h3>
-            
+
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span className="flex items-center space-x-1">
                 <Calendar className="w-3 h-3" />
                 <span>{year}</span>
               </span>
-              <span className="genre-tag">{isMovie ? 'Movie' : 'TV Show'}</span>
+              <span className="genre-tag">{isMovie ? "Movie" : "TV Show"}</span>
             </div>
           </div>
         </div>
@@ -106,13 +112,13 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
         <div className="absolute top-0 left-full ml-2 w-80 p-4 bg-background/95 backdrop-blur-md rounded-xl shadow-2xl border border-border/50 z-50 opacity-0 group-hover:opacity-100 transition-all duration-300">
           <div className="flex space-x-3">
             <img
-              src={getImageUrl(movie.poster_path, 'w185')}
+              src={getImageUrl(movie.poster_path, "w185")}
               alt={title}
               className="w-20 aspect-[2/3] object-cover rounded-lg bg-muted flex-shrink-0"
             />
             <div className="flex-1 space-y-2">
               <h4 className="font-semibold text-base leading-tight">{title}</h4>
-              
+
               <div className="flex items-center space-x-3 text-xs">
                 <div className="flex items-center space-x-1">
                   <Star className="w-3 h-3 rating-star fill-current" />
@@ -121,11 +127,11 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
                 <span>{year}</span>
                 <span className="quality-badge">HD</span>
               </div>
-              
+
               <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
                 {movie.overview}
               </p>
-              
+
               <div className="grid grid-cols-3 gap-1 pt-2">
                 <button
                   onClick={handlePlayClick}
@@ -140,10 +146,14 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
                     "text-xs font-medium py-2 px-2 rounded-lg transition-colors flex items-center justify-center space-x-1",
                     inWatchlist
                       ? "bg-green-500 text-white"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80",
                   )}
                 >
-                  {inWatchlist ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
+                  {inWatchlist ? (
+                    <Check className="w-3 h-3" />
+                  ) : (
+                    <Plus className="w-3 h-3" />
+                  )}
                   <span className="hidden">List</span>
                 </button>
                 <Link
@@ -164,7 +174,7 @@ export function MovieCard({ movie, className, showHoverCard = false }: MovieCard
         isOpen={isPlayerOpen}
         onClose={() => setIsPlayerOpen(false)}
         media={movie}
-        type={isMovie ? 'movie' : 'tv'}
+        type={isMovie ? "movie" : "tv"}
       />
     </div>
   );

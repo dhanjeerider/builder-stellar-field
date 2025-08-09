@@ -1,17 +1,20 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { Search, Star, Calendar, Loader2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { tmdbService, TMDBMovie, TMDBTVShow, getImageUrl } from '@shared/tmdb';
-import { cn } from '@/lib/utils';
+import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { Search, Star, Calendar, Loader2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { tmdbService, TMDBMovie, TMDBTVShow, getImageUrl } from "@shared/tmdb";
+import { cn } from "@/lib/utils";
 
 interface LiveSearchProps {
   className?: string;
   placeholder?: string;
 }
 
-export function LiveSearch({ className, placeholder = "Search movies, TV shows..." }: LiveSearchProps) {
-  const [query, setQuery] = useState('');
+export function LiveSearch({
+  className,
+  placeholder = "Search movies, TV shows...",
+}: LiveSearchProps) {
+  const [query, setQuery] = useState("");
   const [results, setResults] = useState<(TMDBMovie | TMDBTVShow)[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -20,13 +23,16 @@ export function LiveSearch({ className, placeholder = "Search movies, TV shows..
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowResults(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -51,7 +57,7 @@ export function LiveSearch({ className, placeholder = "Search movies, TV shows..
         setResults(searchResults.results.slice(0, 8));
         setShowResults(true);
       } catch (error) {
-        console.error('Search error:', error);
+        console.error("Search error:", error);
         setResults([]);
       } finally {
         setIsSearching(false);
@@ -73,7 +79,7 @@ export function LiveSearch({ className, placeholder = "Search movies, TV shows..
 
   const handleResultClick = () => {
     setShowResults(false);
-    setQuery('');
+    setQuery("");
   };
 
   return (
@@ -102,10 +108,14 @@ export function LiveSearch({ className, placeholder = "Search movies, TV shows..
                 Search Results
               </div>
               {results.map((item) => {
-                const isMovie = 'title' in item;
+                const isMovie = "title" in item;
                 const title = isMovie ? item.title : item.name;
-                const releaseDate = isMovie ? item.release_date : item.first_air_date;
-                const year = releaseDate ? new Date(releaseDate).getFullYear() : '';
+                const releaseDate = isMovie
+                  ? item.release_date
+                  : item.first_air_date;
+                const year = releaseDate
+                  ? new Date(releaseDate).getFullYear()
+                  : "";
                 const linkTo = isMovie ? `/movie/${item.id}` : `/tv/${item.id}`;
 
                 return (
@@ -116,20 +126,20 @@ export function LiveSearch({ className, placeholder = "Search movies, TV shows..
                     className="flex items-center space-x-3 p-3 hover:bg-muted/50 rounded-lg transition-colors group"
                   >
                     <img
-                      src={getImageUrl(item.poster_path, 'w154')}
+                      src={getImageUrl(item.poster_path, "w154")}
                       alt={title}
                       className="w-12 h-16 object-cover rounded bg-muted flex-shrink-0"
                       onError={(e) => {
                         const img = e.target as HTMLImageElement;
-                        img.src = '/placeholder.svg';
+                        img.src = "/placeholder.svg";
                       }}
                     />
-                    
+
                     <div className="flex-1 min-w-0">
                       <h4 className="font-medium text-sm line-clamp-1 group-hover:text-primary transition-colors">
                         {title}
                       </h4>
-                      
+
                       <div className="flex items-center space-x-2 text-xs text-muted-foreground mt-1">
                         <div className="flex items-center space-x-1">
                           <Calendar className="w-3 h-3" />
@@ -139,13 +149,15 @@ export function LiveSearch({ className, placeholder = "Search movies, TV shows..
                           <Star className="w-3 h-3 rating-star fill-current" />
                           <span>{item.vote_average.toFixed(1)}</span>
                         </div>
-                        <span className="genre-tag">{isMovie ? 'Movie' : 'TV Show'}</span>
+                        <span className="genre-tag">
+                          {isMovie ? "Movie" : "TV Show"}
+                        </span>
                       </div>
                     </div>
                   </Link>
                 );
               })}
-              
+
               {query.trim() && (
                 <Link
                   to={`/search?q=${encodeURIComponent(query.trim())}`}

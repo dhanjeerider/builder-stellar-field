@@ -1,33 +1,40 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Search as SearchIcon, Filter, TrendingUp, Clock } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { MovieCard } from '@/components/MovieCard';
-import { tmdbService, TMDBMovie, TMDBTVShow } from '@shared/tmdb';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Search as SearchIcon, Filter, TrendingUp, Clock } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { MovieCard } from "@/components/MovieCard";
+import { tmdbService, TMDBMovie, TMDBTVShow } from "@shared/tmdb";
+import { cn } from "@/lib/utils";
 
 const searchTabs = [
-  { id: 'all', label: 'All', icon: SearchIcon },
-  { id: 'movie', label: 'Movies', icon: SearchIcon },
-  { id: 'tv', label: 'TV Shows', icon: SearchIcon },
+  { id: "all", label: "All", icon: SearchIcon },
+  { id: "movie", label: "Movies", icon: SearchIcon },
+  { id: "tv", label: "TV Shows", icon: SearchIcon },
 ];
 
-const filterOptions = ['Popular', 'Recent', 'Top Rated', 'Trending'];
+const filterOptions = ["Popular", "Recent", "Top Rated", "Trending"];
 
 export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [query, setQuery] = useState(searchParams.get('q') || '');
-  const [activeTab, setActiveTab] = useState('all');
-  const [activeFilter, setActiveFilter] = useState('Popular');
+  const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [activeTab, setActiveTab] = useState("all");
+  const [activeFilter, setActiveFilter] = useState("Popular");
   const [results, setResults] = useState<(TMDBMovie | TMDBTVShow)[]>([]);
   const [movieResults, setMovieResults] = useState<TMDBMovie[]>([]);
   const [tvResults, setTVResults] = useState<TMDBTVShow[]>([]);
-  const [trendingContent, setTrendingContent] = useState<(TMDBMovie | TMDBTVShow)[]>([]);
+  const [trendingContent, setTrendingContent] = useState<
+    (TMDBMovie | TMDBTVShow)[]
+  >([]);
   const [isSearching, setIsSearching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [recentSearches] = useState(['Avengers', 'Spider-Man', 'Game of Thrones', 'Breaking Bad']);
+  const [recentSearches] = useState([
+    "Avengers",
+    "Spider-Man",
+    "Game of Thrones",
+    "Breaking Bad",
+  ]);
 
   useEffect(() => {
     // Load trending content on initial load
@@ -36,7 +43,7 @@ export default function Search() {
         const trending = await tmdbService.getTrendingAll();
         setTrendingContent(trending.results.slice(0, 20));
       } catch (error) {
-        console.error('Error fetching trending content:', error);
+        console.error("Error fetching trending content:", error);
       }
     };
 
@@ -45,7 +52,7 @@ export default function Search() {
 
   useEffect(() => {
     const searchQuery = query.trim();
-    
+
     if (searchQuery) {
       performSearch(searchQuery);
     } else {
@@ -58,26 +65,44 @@ export default function Search() {
 
   const performSearch = async (searchQuery: string) => {
     if (!searchQuery) return;
-    
+
     try {
       setIsSearching(true);
-      
+
       let searchResults;
-      
-      if (activeTab === 'movie') {
-        searchResults = await tmdbService.searchMovies(searchQuery, currentPage);
-        setMovieResults(currentPage === 1 ? searchResults.results : prev => [...prev, ...searchResults.results]);
-      } else if (activeTab === 'tv') {
-        searchResults = await tmdbService.searchTVShows(searchQuery, currentPage);
-        setTVResults(currentPage === 1 ? searchResults.results : prev => [...prev, ...searchResults.results]);
+
+      if (activeTab === "movie") {
+        searchResults = await tmdbService.searchMovies(
+          searchQuery,
+          currentPage,
+        );
+        setMovieResults(
+          currentPage === 1
+            ? searchResults.results
+            : (prev) => [...prev, ...searchResults.results],
+        );
+      } else if (activeTab === "tv") {
+        searchResults = await tmdbService.searchTVShows(
+          searchQuery,
+          currentPage,
+        );
+        setTVResults(
+          currentPage === 1
+            ? searchResults.results
+            : (prev) => [...prev, ...searchResults.results],
+        );
       } else {
         searchResults = await tmdbService.searchMulti(searchQuery, currentPage);
-        setResults(currentPage === 1 ? searchResults.results : prev => [...prev, ...searchResults.results]);
+        setResults(
+          currentPage === 1
+            ? searchResults.results
+            : (prev) => [...prev, ...searchResults.results],
+        );
       }
-      
+
       setTotalPages(searchResults.total_pages);
     } catch (error) {
-      console.error('Error searching:', error);
+      console.error("Error searching:", error);
     } finally {
       setIsSearching(false);
     }
@@ -95,15 +120,15 @@ export default function Search() {
 
   const loadMore = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(prev => prev + 1);
+      setCurrentPage((prev) => prev + 1);
     }
   };
 
   const getCurrentResults = () => {
     switch (activeTab) {
-      case 'movie':
+      case "movie":
         return movieResults;
-      case 'tv':
+      case "tv":
         return tvResults;
       default:
         return results;
@@ -120,7 +145,7 @@ export default function Search() {
       {/* Search Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-6">Search</h1>
-        
+
         <div className="relative max-w-2xl mb-6">
           <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
           <Input
@@ -198,14 +223,17 @@ export default function Search() {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">
-              {isSearching && getCurrentResults().length === 0 ? 'Searching...' : `Results for "${query}"`}
+              {isSearching && getCurrentResults().length === 0
+                ? "Searching..."
+                : `Results for "${query}"`}
             </h2>
             {!isSearching && getResultsCount() > 0 && (
               <div className="flex items-center space-x-4">
                 <span className="text-muted-foreground text-sm">
-                  {getResultsCount()} result{getResultsCount() !== 1 ? 's' : ''} found
+                  {getResultsCount()} result{getResultsCount() !== 1 ? "s" : ""}{" "}
+                  found
                 </span>
-                
+
                 {/* Filter Options */}
                 <div className="flex items-center space-x-2">
                   <Filter className="w-4 h-4 text-muted-foreground" />
@@ -217,9 +245,9 @@ export default function Search() {
                         size="sm"
                         className={cn(
                           "text-xs",
-                          activeFilter === filter 
-                            ? "bg-primary text-primary-foreground" 
-                            : "text-muted-foreground hover:text-foreground"
+                          activeFilter === filter
+                            ? "bg-primary text-primary-foreground"
+                            : "text-muted-foreground hover:text-foreground",
                         )}
                         onClick={() => setActiveFilter(filter)}
                       >
@@ -248,21 +276,25 @@ export default function Search() {
             <>
               <div className="movies-grid">
                 {getCurrentResults().map((item) => (
-                  <MovieCard key={`${item.id}-${activeTab}`} movie={item} showHoverCard={true} />
+                  <MovieCard
+                    key={`${item.id}-${activeTab}`}
+                    movie={item}
+                    showHoverCard={true}
+                  />
                 ))}
               </div>
-              
+
               {/* Load More Button */}
               {currentPage < totalPages && (
                 <div className="text-center mt-8">
-                  <Button 
+                  <Button
                     onClick={loadMore}
-                    variant="outline" 
-                    size="lg" 
+                    variant="outline"
+                    size="lg"
                     className="neu-button border-border/50"
                     disabled={isSearching}
                   >
-                    {isSearching ? 'Loading...' : 'Load More Results'}
+                    {isSearching ? "Loading..." : "Load More Results"}
                   </Button>
                 </div>
               )}
@@ -272,7 +304,8 @@ export default function Search() {
               <div className="text-6xl mb-4">🔍</div>
               <h3 className="text-xl font-semibold mb-2">No results found</h3>
               <p className="text-muted-foreground">
-                Try adjusting your search terms or browse our trending content instead.
+                Try adjusting your search terms or browse our trending content
+                instead.
               </p>
             </div>
           ) : null}

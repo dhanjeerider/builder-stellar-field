@@ -1,34 +1,50 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { ChevronRight, TrendingUp, Star, Calendar, Play, Loader2, Filter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { MovieCard } from '@/components/MovieCard';
-import { MovieSlider } from '@/components/MovieSlider';
-import { LanguageSelector } from '@/components/LanguageSelector';
-import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
-import { useLanguage } from '@/hooks/use-language';
-import { tmdbService, TMDBMovie, TMDBTVShow, getImageUrl, getBackdropUrl } from '@shared/tmdb';
-import { cn } from '@/lib/utils';
+import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import {
+  ChevronRight,
+  TrendingUp,
+  Star,
+  Calendar,
+  Play,
+  Loader2,
+  Filter,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MovieCard } from "@/components/MovieCard";
+import { MovieSlider } from "@/components/MovieSlider";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
+import { useLanguage } from "@/hooks/use-language";
+import {
+  tmdbService,
+  TMDBMovie,
+  TMDBTVShow,
+  getImageUrl,
+  getBackdropUrl,
+} from "@shared/tmdb";
+import { cn } from "@/lib/utils";
 
 const tabs = [
-  { id: 'movies', label: 'Movies', icon: Play },
-  { id: 'tv', label: 'TV Shows', icon: Star },
-  { id: 'trending', label: 'Trending', icon: TrendingUp },
+  { id: "movies", label: "Movies", icon: Play },
+  { id: "tv", label: "TV Shows", icon: Star },
+  { id: "trending", label: "Trending", icon: TrendingUp },
 ];
 
-const movieCategories = ['Popular', 'Top Rated', 'Upcoming', 'Now Playing'];
+const movieCategories = ["Popular", "Top Rated", "Upcoming", "Now Playing"];
 
 export default function Index() {
   const { getDiscoverParams } = useLanguage();
-  const [activeTab, setActiveTab] = useState('movies');
-  const [activeCategory, setActiveCategory] = useState('Popular');
+  const [activeTab, setActiveTab] = useState("movies");
+  const [activeCategory, setActiveCategory] = useState("Popular");
   const [featuredMovie, setFeaturedMovie] = useState<TMDBMovie | null>(null);
   const [popularMovies, setPopularMovies] = useState<TMDBMovie[]>([]);
   const [topRatedMovies, setTopRatedMovies] = useState<TMDBMovie[]>([]);
   const [upcomingMovies, setUpcomingMovies] = useState<TMDBMovie[]>([]);
   const [nowPlayingMovies, setNowPlayingMovies] = useState<TMDBMovie[]>([]);
   const [popularTVShows, setPopularTVShows] = useState<TMDBTVShow[]>([]);
-  const [trendingContent, setTrendingContent] = useState<(TMDBMovie | TMDBTVShow)[]>([]);
+  const [trendingContent, setTrendingContent] = useState<
+    (TMDBMovie | TMDBTVShow)[]
+  >([]);
   const [bollywoodMovies, setBollywoodMovies] = useState<TMDBMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -42,14 +58,25 @@ export default function Index() {
         const languageParams = getDiscoverParams();
 
         // Fetch all movie categories
-        const [popularRes, topRatedRes, upcomingRes, nowPlayingRes, tvRes, trendingRes, bollywoodRes] = await Promise.all([
+        const [
+          popularRes,
+          topRatedRes,
+          upcomingRes,
+          nowPlayingRes,
+          tvRes,
+          trendingRes,
+          bollywoodRes,
+        ] = await Promise.all([
           tmdbService.getPopularMovies(1, languageParams),
           tmdbService.getTopRatedMovies(1, languageParams),
           tmdbService.getUpcomingMovies(1, languageParams),
           tmdbService.getNowPlayingMovies(1, languageParams),
           tmdbService.getPopularTVShows(1, languageParams),
           tmdbService.getTrendingAll(),
-          tmdbService.getPopularMovies(1, { with_original_language: 'hi', region: 'IN' }),
+          tmdbService.getPopularMovies(1, {
+            with_original_language: "hi",
+            region: "IN",
+          }),
         ]);
 
         setPopularMovies(popularRes.results);
@@ -59,7 +86,7 @@ export default function Index() {
         setPopularTVShows(tvRes.results);
         setTrendingContent(trendingRes.results);
         setBollywoodMovies(bollywoodRes.results);
-        
+
         // Set featured movie (first popular movie)
         if (popularRes.results.length > 0) {
           setFeaturedMovie(popularRes.results[0]);
@@ -69,7 +96,7 @@ export default function Index() {
         setCurrentPage(1);
         setTotalPages(popularRes.total_pages);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -80,13 +107,13 @@ export default function Index() {
 
   const getCurrentMovies = () => {
     switch (activeCategory) {
-      case 'Popular':
+      case "Popular":
         return popularMovies;
-      case 'Top Rated':
+      case "Top Rated":
         return topRatedMovies;
-      case 'Upcoming':
+      case "Upcoming":
         return upcomingMovies;
-      case 'Now Playing':
+      case "Now Playing":
         return nowPlayingMovies;
       default:
         return popularMovies;
@@ -95,11 +122,11 @@ export default function Index() {
 
   const getCurrentContent = () => {
     switch (activeTab) {
-      case 'movies':
+      case "movies":
         return getCurrentMovies();
-      case 'tv':
+      case "tv":
         return popularTVShows;
-      case 'trending':
+      case "trending":
         return trendingContent;
       default:
         return getCurrentMovies();
@@ -114,47 +141,69 @@ export default function Index() {
       const nextPage = currentPage + 1;
       const languageParams = getDiscoverParams();
 
-      if (activeTab === 'movies') {
+      if (activeTab === "movies") {
         let moviesRes;
         switch (activeCategory) {
-          case 'Popular':
-            moviesRes = await tmdbService.getPopularMovies(nextPage, languageParams);
-            setPopularMovies(prev => [...prev, ...moviesRes.results]);
+          case "Popular":
+            moviesRes = await tmdbService.getPopularMovies(
+              nextPage,
+              languageParams,
+            );
+            setPopularMovies((prev) => [...prev, ...moviesRes.results]);
             break;
-          case 'Top Rated':
-            moviesRes = await tmdbService.getTopRatedMovies(nextPage, languageParams);
-            setTopRatedMovies(prev => [...prev, ...moviesRes.results]);
+          case "Top Rated":
+            moviesRes = await tmdbService.getTopRatedMovies(
+              nextPage,
+              languageParams,
+            );
+            setTopRatedMovies((prev) => [...prev, ...moviesRes.results]);
             break;
-          case 'Upcoming':
-            moviesRes = await tmdbService.getUpcomingMovies(nextPage, languageParams);
-            setUpcomingMovies(prev => [...prev, ...moviesRes.results]);
+          case "Upcoming":
+            moviesRes = await tmdbService.getUpcomingMovies(
+              nextPage,
+              languageParams,
+            );
+            setUpcomingMovies((prev) => [...prev, ...moviesRes.results]);
             break;
-          case 'Now Playing':
-            moviesRes = await tmdbService.getNowPlayingMovies(nextPage, languageParams);
-            setNowPlayingMovies(prev => [...prev, ...moviesRes.results]);
+          case "Now Playing":
+            moviesRes = await tmdbService.getNowPlayingMovies(
+              nextPage,
+              languageParams,
+            );
+            setNowPlayingMovies((prev) => [...prev, ...moviesRes.results]);
             break;
         }
-      } else if (activeTab === 'tv') {
-        const tvRes = await tmdbService.getPopularTVShows(nextPage, languageParams);
-        setPopularTVShows(prev => [...prev, ...tvRes.results]);
-      } else if (activeTab === 'trending') {
+      } else if (activeTab === "tv") {
+        const tvRes = await tmdbService.getPopularTVShows(
+          nextPage,
+          languageParams,
+        );
+        setPopularTVShows((prev) => [...prev, ...tvRes.results]);
+      } else if (activeTab === "trending") {
         const trendingRes = await tmdbService.getTrendingAll();
-        setTrendingContent(prev => [...prev, ...trendingRes.results]);
+        setTrendingContent((prev) => [...prev, ...trendingRes.results]);
       }
 
       setCurrentPage(nextPage);
     } catch (error) {
-      console.error('Error loading more content:', error);
+      console.error("Error loading more content:", error);
     } finally {
       setLoadingMore(false);
     }
-  }, [loadingMore, currentPage, totalPages, activeTab, activeCategory, getDiscoverParams]);
+  }, [
+    loadingMore,
+    currentPage,
+    totalPages,
+    activeTab,
+    activeCategory,
+    getDiscoverParams,
+  ]);
 
   // Infinite scroll
   const { isFetching } = useInfiniteScroll({
     hasNextPage: currentPage < totalPages,
     fetchNextPage: loadMoreContent,
-    threshold: 200
+    threshold: 200,
   });
 
   if (loading) {
@@ -200,14 +249,16 @@ export default function Index() {
       {/* Featured Hero Section */}
       {featuredMovie && (
         <section className="relative h-[85vh] overflow-hidden">
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${getBackdropUrl(featuredMovie.backdrop_path, 'original')})` }}
+            style={{
+              backgroundImage: `url(${getBackdropUrl(featuredMovie.backdrop_path, "original")})`,
+            }}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-transparent to-transparent" />
           </div>
-          
+
           <div className="relative container mx-auto px-4 h-full flex items-center">
             <div className="max-w-2xl space-y-6">
               <div className="space-y-2">
@@ -221,19 +272,21 @@ export default function Index() {
                   </div>
                   <div className="flex items-center space-x-1">
                     <Calendar className="w-4 h-4" />
-                    <span>{new Date(featuredMovie.release_date).getFullYear()}</span>
+                    <span>
+                      {new Date(featuredMovie.release_date).getFullYear()}
+                    </span>
                   </div>
                 </div>
-                
+
                 <h1 className="text-4xl md:text-6xl font-bold leading-tight">
                   {featuredMovie.title}
                 </h1>
               </div>
-              
+
               <p className="text-lg text-muted-foreground leading-relaxed line-clamp-3">
                 {featuredMovie.overview}
               </p>
-              
+
               <div className="flex space-x-4">
                 <Link to={`/watch/movie/${featuredMovie.id}`}>
                   <Button size="lg" className="bg-primary hover:bg-primary/90">
@@ -241,9 +294,13 @@ export default function Index() {
                     Play Now
                   </Button>
                 </Link>
-                
+
                 <Link to={`/movie/${featuredMovie.id}`}>
-                  <Button variant="outline" size="lg" className="neu-button border-border/50">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="neu-button border-border/50"
+                  >
                     More Info
                     <ChevronRight className="w-4 h-4 ml-2" />
                   </Button>
@@ -277,7 +334,7 @@ export default function Index() {
         </div>
 
         {/* Category Filter (for movies tab) */}
-        {activeTab === 'movies' && (
+        {activeTab === "movies" && (
           <div className="mb-8">
             <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-2">
               {movieCategories.map((category) => (
@@ -289,7 +346,7 @@ export default function Index() {
                     "flex-none neu-button border-border/50",
                     activeCategory === category
                       ? "bg-primary text-primary-foreground"
-                      : "bg-background text-foreground hover:bg-muted/50"
+                      : "bg-background text-foreground hover:bg-muted/50",
                   )}
                   onClick={() => setActiveCategory(category)}
                 >
@@ -305,28 +362,32 @@ export default function Index() {
           <div>
             <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
               <span>
-                {activeTab === 'movies' ? `${activeCategory} Movies` :
-                 activeTab === 'tv' ? 'Popular TV Shows' :
-                 'Trending Now'}
+                {activeTab === "movies"
+                  ? `${activeCategory} Movies`
+                  : activeTab === "tv"
+                    ? "Popular TV Shows"
+                    : "Trending Now"}
               </span>
-              {activeTab === 'movies' && activeCategory === 'Popular' && (
+              {activeTab === "movies" && activeCategory === "Popular" && (
                 <Link to="/movies" className="ml-auto">
-                  <Button variant="outline" size="sm" className="neu-button border-border/50">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="neu-button border-border/50"
+                  >
                     More
                     <ChevronRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
               )}
             </h2>
-            
+
             <div className="movies-grid">
-              {getCurrentContent().slice(0, 18).map((item) => (
-                <MovieCard 
-                  key={item.id} 
-                  movie={item} 
-                  showHoverCard={true}
-                />
-              ))}
+              {getCurrentContent()
+                .slice(0, 18)
+                .map((item) => (
+                  <MovieCard key={item.id} movie={item} showHoverCard={true} />
+                ))}
             </div>
           </div>
 
@@ -334,20 +395,24 @@ export default function Index() {
           {(isFetching || loadingMore) && currentPage < totalPages && (
             <div className="text-center py-8">
               <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary mb-2" />
-              <p className="text-sm text-muted-foreground">Loading more content...</p>
+              <p className="text-sm text-muted-foreground">
+                Loading more content...
+              </p>
             </div>
           )}
 
           {/* End of content indicator */}
           {currentPage >= totalPages && getCurrentContent().length > 0 && (
             <div className="text-center py-8">
-              <p className="text-sm text-muted-foreground">You've reached the end!</p>
+              <p className="text-sm text-muted-foreground">
+                You've reached the end!
+              </p>
             </div>
           )}
         </div>
 
         {/* Additional Sliders */}
-        {activeTab === 'movies' && popularMovies.length > 0 && (
+        {activeTab === "movies" && popularMovies.length > 0 && (
           <>
             <MovieSlider
               title="Trending Movies"

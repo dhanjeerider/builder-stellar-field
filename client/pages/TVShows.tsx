@@ -1,15 +1,15 @@
-import { useState, useEffect, useCallback } from 'react';
-import { ChevronRight, Filter, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { MovieCard } from '@/components/MovieCard';
-import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
-import { tmdbService, TMDBTVShow } from '@shared/tmdb';
-import { cn } from '@/lib/utils';
+import { useState, useEffect, useCallback } from "react";
+import { ChevronRight, Filter, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MovieCard } from "@/components/MovieCard";
+import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
+import { tmdbService, TMDBTVShow } from "@shared/tmdb";
+import { cn } from "@/lib/utils";
 
-const tvCategories = ['Popular', 'Top Rated', 'Airing Today', 'On The Air'];
+const tvCategories = ["Popular", "Top Rated", "Airing Today", "On The Air"];
 
 export default function TVShows() {
-  const [activeCategory, setActiveCategory] = useState('Popular');
+  const [activeCategory, setActiveCategory] = useState("Popular");
   const [shows, setShows] = useState<TMDBTVShow[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -31,16 +31,16 @@ export default function TVShows() {
 
       let showsRes;
       switch (activeCategory) {
-        case 'Popular':
+        case "Popular":
           showsRes = await tmdbService.getPopularTVShows(page);
           break;
-        case 'Top Rated':
+        case "Top Rated":
           showsRes = await tmdbService.getTopRatedTVShows(page);
           break;
-        case 'Airing Today':
+        case "Airing Today":
           showsRes = await tmdbService.getAiringTodayTVShows(page);
           break;
-        case 'On The Air':
+        case "On The Air":
           showsRes = await tmdbService.getOnTheAirTVShows(page);
           break;
         default:
@@ -51,13 +51,13 @@ export default function TVShows() {
         setShows(showsRes.results);
         setCurrentPage(1);
       } else {
-        setShows(prev => [...prev, ...showsRes.results]);
+        setShows((prev) => [...prev, ...showsRes.results]);
         setCurrentPage(page);
       }
 
       setTotalPages(showsRes.total_pages);
     } catch (error) {
-      console.error('Error fetching TV shows:', error);
+      console.error("Error fetching TV shows:", error);
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -74,7 +74,7 @@ export default function TVShows() {
   const { isFetching } = useInfiniteScroll({
     hasNextPage: currentPage < totalPages,
     fetchNextPage,
-    threshold: 200
+    threshold: 200,
   });
 
   const handleCategoryChange = (category: string) => {
@@ -92,7 +92,10 @@ export default function TVShows() {
 
         <div className="flex space-x-2 mb-8">
           {Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className="h-8 bg-muted animate-pulse rounded w-24" />
+            <div
+              key={index}
+              className="h-8 bg-muted animate-pulse rounded w-24"
+            />
           ))}
         </div>
 
@@ -125,9 +128,11 @@ export default function TVShows() {
       <div className="mb-8">
         <div className="flex items-center space-x-4 mb-4">
           <Filter className="w-5 h-5 text-muted-foreground" />
-          <span className="text-sm font-medium text-muted-foreground">Browse by:</span>
+          <span className="text-sm font-medium text-muted-foreground">
+            Browse by:
+          </span>
         </div>
-        
+
         <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-2">
           {tvCategories.map((category) => (
             <Button
@@ -136,9 +141,9 @@ export default function TVShows() {
               size="sm"
               className={cn(
                 "flex-none neu-button border-border/50",
-                activeCategory === category 
-                  ? "bg-primary text-primary-foreground" 
-                  : "bg-background text-foreground hover:bg-muted/50"
+                activeCategory === category
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-background text-foreground hover:bg-muted/50",
               )}
               onClick={() => handleCategoryChange(category)}
             >
@@ -155,7 +160,7 @@ export default function TVShows() {
             <span>{activeCategory} TV Shows</span>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </h2>
-          
+
           <div className="movies-grid">
             {shows.map((show) => (
               <MovieCard key={show.id} movie={show} showHoverCard={true} />
@@ -167,14 +172,18 @@ export default function TVShows() {
         {(isFetching || loadingMore) && currentPage < totalPages && (
           <div className="text-center py-8">
             <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
-            <p className="text-sm text-muted-foreground mt-2">Loading more TV shows...</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Loading more TV shows...
+            </p>
           </div>
         )}
 
         {/* End of content indicator */}
         {currentPage >= totalPages && shows.length > 0 && (
           <div className="text-center py-8">
-            <p className="text-sm text-muted-foreground">You've reached the end of the list!</p>
+            <p className="text-sm text-muted-foreground">
+              You've reached the end of the list!
+            </p>
           </div>
         )}
       </div>
