@@ -184,13 +184,15 @@ export default function MovieDetail() {
               
               {/* Action Buttons */}
               <div className="flex gap-3">
-                <Link to={`/watch/${isMovie ? 'movie' : 'tv'}/${media.id}`}>
-                  <Button size="lg" className="bg-primary hover:bg-primary/90">
-                    <Play className="w-5 h-5 mr-2 fill-current" />
-                    Play Now
-                  </Button>
-                </Link>
-                
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90"
+                  onClick={() => setIsPlayerOpen(true)}
+                >
+                  <Play className="w-5 h-5 mr-2 fill-current" />
+                  Play Now
+                </Button>
+
                 <Button variant="outline" size="lg" className="neu-button">
                   <Plus className="w-5 h-5 mr-2" />
                   Add to List
