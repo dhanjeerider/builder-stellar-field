@@ -270,6 +270,16 @@ export default function MovieDetail() {
           </section>
         )}
       </div>
+
+      {/* Video Player Modal */}
+      {media && (
+        <VideoPlayerModal
+          isOpen={isPlayerOpen}
+          onClose={() => setIsPlayerOpen(false)}
+          media={media}
+          type={isMovie ? 'movie' : 'tv'}
+        />
+      )}
     </div>
   );
 }
