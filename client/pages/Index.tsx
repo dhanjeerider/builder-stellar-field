@@ -276,25 +276,9 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Browse Filters */}
+        {/* Category Filter (for movies tab) */}
         {activeTab === 'movies' && (
           <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-3">
-                <Filter className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-medium text-muted-foreground">Browse by:</span>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 mb-4">
-              {/* Language Filter */}
-              <div className="flex items-center space-x-3">
-                <label className="text-sm font-medium text-muted-foreground">Language:</label>
-                <LanguageSelector showLabel={true} className="neu-card-inset" />
-              </div>
-            </div>
-
-            {/* Category Filter */}
             <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-2">
               {movieCategories.map((category) => (
                 <Button
