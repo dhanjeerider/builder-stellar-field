@@ -103,9 +103,6 @@ export function VideoPlayerModal({ isOpen, onClose, media, type }: VideoPlayerMo
               >
                 <Share2 className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={onClose} title="Close">
-                <X className="h-4 w-4" />
-              </Button>
             </div>
           </div>
         </DialogHeader>
