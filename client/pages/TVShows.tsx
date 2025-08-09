@@ -12,17 +12,23 @@ export default function TVShows() {
   const [activeCategory, setActiveCategory] = useState('Popular');
   const [shows, setShows] = useState<TMDBTVShow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  // Initial fetch
   useEffect(() => {
     fetchTVShows();
   }, [activeCategory]);
 
   const fetchTVShows = async (page = 1) => {
     try {
-      setLoading(true);
-      
+      if (page === 1) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
+
       let showsRes;
       switch (activeCategory) {
         case 'Popular':
@@ -43,24 +49,33 @@ export default function TVShows() {
 
       if (page === 1) {
         setShows(showsRes.results);
+        setCurrentPage(1);
       } else {
         setShows(prev => [...prev, ...showsRes.results]);
+        setCurrentPage(page);
       }
-      
-      setCurrentPage(page);
+
       setTotalPages(showsRes.total_pages);
     } catch (error) {
       console.error('Error fetching TV shows:', error);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
-  const loadMore = () => {
-    if (currentPage < totalPages) {
-      fetchTVShows(currentPage + 1);
-    }
-  };
+  // Fetch next page
+  const fetchNextPage = useCallback(async () => {
+    if (currentPage >= totalPages || loadingMore) return;
+    await fetchTVShows(currentPage + 1);
+  }, [currentPage, totalPages, loadingMore, activeCategory]);
+
+  // Infinite scroll
+  const { isFetching } = useInfiniteScroll({
+    hasNextPage: currentPage < totalPages,
+    fetchNextPage,
+    threshold: 200
+  });
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
