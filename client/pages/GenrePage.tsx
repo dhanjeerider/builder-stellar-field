@@ -157,28 +157,24 @@ export default function GenrePage() {
 
       {/* Sort Filter */}
       <div className="mb-8">
-        <div className="flex items-center space-x-4 mb-4">
-          <Filter className="w-5 h-5 text-muted-foreground" />
-          <span className="text-sm font-medium text-muted-foreground">Sort by:</span>
-        </div>
-        
-        <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-2">
-          {sortOptions.map((option) => (
-            <Button
-              key={option}
-              variant={activeSort === option ? "default" : "outline"}
-              size="sm"
-              className={cn(
-                "flex-none neu-button border-border/50",
-                activeSort === option 
-                  ? "bg-primary text-primary-foreground" 
-                  : "bg-background text-foreground hover:bg-muted/50"
-              )}
-              onClick={() => setActiveSort(option)}
-            >
-              {option}
-            </Button>
-          ))}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-4">
+            <Filter className="w-5 h-5 text-muted-foreground" />
+            <span className="text-sm font-medium text-muted-foreground">Sort by:</span>
+          </div>
+
+          <Select value={activeSort} onValueChange={setActiveSort}>
+            <SelectTrigger className="w-48 neu-card-inset">
+              <SelectValue placeholder="Select sorting option" />
+            </SelectTrigger>
+            <SelectContent>
+              {sortOptions.map((option) => (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
