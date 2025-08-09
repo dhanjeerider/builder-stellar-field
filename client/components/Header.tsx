@@ -132,6 +132,7 @@ export function Header() {
                 placeholder="Search movies, TV shows..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={handleKeyPress}
                 className="w-full pl-10 pr-4 neu-card-inset bg-background/50 border-0"
                 autoFocus
               />
