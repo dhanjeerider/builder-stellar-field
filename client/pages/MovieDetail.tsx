@@ -159,7 +159,7 @@ export default function MovieDetail() {
             </div>
             
             {/* Info */}
-            <div className="flex-1 space-y-4">
+            <div className="flex-1 space-y-4 text-center md:text-left">
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">{title}</h1>
               
               <div className="flex flex-wrap items-center gap-4 text-sm">
