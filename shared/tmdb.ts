@@ -131,8 +131,8 @@ class TMDBService {
   }
 
   // Movies
-  async getPopularMovies(page = 1): Promise<TMDBSearchResponse<TMDBMovie>> {
-    return this.fetchFromTMDB(`/movie/popular?page=${page}`);
+  async getPopularMovies(page = 1, languageParams?: Record<string, string>): Promise<TMDBSearchResponse<TMDBMovie>> {
+    return this.fetchFromTMDB(`/movie/popular?page=${page}`, languageParams);
   }
 
   async getTopRatedMovies(page = 1): Promise<TMDBSearchResponse<TMDBMovie>> {
