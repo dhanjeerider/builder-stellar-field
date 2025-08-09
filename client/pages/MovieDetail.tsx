@@ -150,11 +150,11 @@ export default function MovieDetail() {
         <div className="relative container mx-auto px-4 h-full flex items-end pb-8">
           <div className="flex flex-col md:flex-row gap-6 w-full">
             {/* Poster */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 mx-auto md:mx-0">
               <img
                 src={getImageUrl(media.poster_path, 'w500')}
                 alt={title}
-                className="w-48 md:w-64 aspect-[2/3] object-cover rounded-xl shadow-2xl"
+                className="w-48 md:w-64 aspect-[2/3] object-cover rounded-xl shadow-2xl mx-auto md:mx-0"
               />
             </div>
             
