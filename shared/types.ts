@@ -101,7 +101,8 @@ export const SERVERS: Server[] = [
     name: "All in one 🔥with download + 4k size",
     type: "tmdb",
     url: "https://iframe.pstream.mov/media/tmdb-movie-{tmdb_id}",
-    url_tv: "https://iframe.pstream.mov/media/tmdb-tv-{tmdb_id}-{season}-{episode}",
+    url_tv:
+      "https://iframe.pstream.mov/media/tmdb-tv-{tmdb_id}-{season}-{episode}",
   },
   {
     name: "2",
@@ -169,7 +170,8 @@ export const SERVERS: Server[] = [
     name: "MultiEmbed",
     type: "tmdb",
     url: "https://multiembed.mov/?video_id={tmdb_id}&tmdb=1",
-    url_tv: "https://multiembed.mov/?video_id={tmdb_id}&tmdb=1&s={season}&e={episode}",
+    url_tv:
+      "https://multiembed.mov/?video_id={tmdb_id}&tmdb=1&s={season}&e={episode}",
   },
   {
     name: "MoviesAPI",
@@ -241,7 +243,8 @@ export const SERVERS: Server[] = [
     name: "VidEasy (4K)",
     type: "tmdb",
     url: "https://player.videasy.net/movie/{tmdb_id}?color=8834ec",
-    url_tv: "https://player.videasy.net/tv/{tmdb_id}/{season}/{episode}?color=8834ec",
+    url_tv:
+      "https://player.videasy.net/tv/{tmdb_id}/{season}/{episode}?color=8834ec",
   },
   {
     name: "Vidify",
@@ -259,7 +262,8 @@ export const SERVERS: Server[] = [
     name: "RiveStream",
     type: "tmdb",
     url: "https://rivestream.org/embed?type=movie&id={tmdb_id}",
-    url_tv: "https://rivestream.org/embed?type=tv&id={tmdb_id}&season={season}&episode={episode}",
+    url_tv:
+      "https://rivestream.org/embed?type=tv&id={tmdb_id}&season={season}&episode={episode}",
   },
   {
     name: "Vidora",
@@ -271,19 +275,22 @@ export const SERVERS: Server[] = [
     name: "VidSrcCC",
     type: "tmdb",
     url: "https://vidsrc.cc/v2/embed/movie/{tmdb_id}?autoPlay=false",
-    url_tv: "https://vidsrc.cc/v2/embed/tv/{tmdb_id}/{season}/{episode}?autoPlay=false",
+    url_tv:
+      "https://vidsrc.cc/v2/embed/tv/{tmdb_id}/{season}/{episode}?autoPlay=false",
   },
   {
     name: "StreamFlix",
     type: "tmdb",
     url: "https://watch.streamflix.one/movie/{tmdb_id}/watch?server=1",
-    url_tv: "https://watch.streamflix.one/tv/{tmdb_id}/watch?server=1&season={season}&episode={episode}",
+    url_tv:
+      "https://watch.streamflix.one/tv/{tmdb_id}/watch?server=1&season={season}&episode={episode}",
   },
   {
     name: "NebulaFlix",
     type: "tmdb",
     url: "https://nebulaflix.stream/movie?mt={tmdb_id}&server=1",
-    url_tv: "https://nebulaflix.stream/show?st={tmdb_id}&season={season}&episode={episode}&server=1",
+    url_tv:
+      "https://nebulaflix.stream/show?st={tmdb_id}&season={season}&episode={episode}&server=1",
   },
   {
     name: "VidJoy",
@@ -307,12 +314,14 @@ export const SERVERS: Server[] = [
     name: "Frembed (FR)",
     type: "tmdb",
     url: "https://frembed.icu/api/film.php?id={tmdb_id}",
-    url_tv: "https://frembed.icu/api/serie.php?id={tmdb_id}&sa={season}&epi={episode}",
+    url_tv:
+      "https://frembed.icu/api/serie.php?id={tmdb_id}&sa={season}&epi={episode}",
   },
   {
     name: "UEmbed (premium)",
     type: "tmdb",
     url: "https://uembed.site/?id={tmdb_id}&apikey=thisisforsurenotapremiumkey_right?",
-    url_tv: "https://uembed.site/?id={tmdb_id}&season={season}&episode={episode}&apikey=thisisforsurenotapremiumkey_right?",
+    url_tv:
+      "https://uembed.site/?id={tmdb_id}&season={season}&episode={episode}&apikey=thisisforsurenotapremiumkey_right?",
   },
 ];
